@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Foot Pedal
+Comment=Configure Elgato pedal presets and actions
+Exec=foot-pedal
+Icon=input-gaming
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=Elgato;Stream Deck;Pedal;Dictation;
+StartupNotify=false

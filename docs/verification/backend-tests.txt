@@ -1,0 +1,35 @@
+test_builtin_immutable (test_daemon.DaemonTests.test_builtin_immutable) ... ok
+test_command_uses_argv_not_shell (test_daemon.DaemonTests.test_command_uses_argv_not_shell) ... ok
+test_connected_watch_sleeps_until_state_changes_and_expires_lease (test_daemon.DaemonTests.test_connected_watch_sleeps_until_state_changes_and_expires_lease) ... ok
+test_disconnect_restores_microphone (test_daemon.DaemonTests.test_disconnect_restores_microphone) ... ok
+test_error_visible_per_pedal (test_daemon.DaemonTests.test_error_visible_per_pedal) ... ok
+test_failed_restore_retains_recovery_and_can_retry (test_daemon.DaemonTests.test_failed_restore_retains_recovery_and_can_retry) ... ok
+test_first_held_report_does_not_fire (test_daemon.DaemonTests.test_first_held_report_does_not_fire) ... ok
+test_malformed_config_is_preserved (test_daemon.DaemonTests.test_malformed_config_is_preserved) ... ok
+test_media_action_routes_mpris (test_daemon.DaemonTests.test_media_action_routes_mpris) ... ok
+test_microphone_preserves_unmuted_initial_state (test_daemon.DaemonTests.test_microphone_preserves_unmuted_initial_state) ... ok
+test_microphone_restores_on_release (test_daemon.DaemonTests.test_microphone_restores_on_release) ... ok
+test_only_owner_can_end_test (test_daemon.DaemonTests.test_only_owner_can_end_test) ... ok
+test_original_mapping_press_edges (test_daemon.DaemonTests.test_original_mapping_press_edges) ... ok
+test_pause_restores_microphone (test_daemon.DaemonTests.test_pause_restores_microphone) ... ok
+test_paused_state_survives_test (test_daemon.DaemonTests.test_paused_state_survives_test) ... ok
+test_persist_custom_preserves_other_pedals (test_daemon.DaemonTests.test_persist_custom_preserves_other_pedals) ... ok
+test_recover_microphone_after_crash (test_daemon.DaemonTests.test_recover_microphone_after_crash) ... ok
+test_release_before_hold_task_does_not_unmute (test_daemon.DaemonTests.test_release_before_hold_task_does_not_unmute) ... ok
+test_rpc_connection_loss_exits_test (test_daemon.DaemonTests.test_rpc_connection_loss_exits_test) ... ok
+test_shared_microphone_restores_after_last_owner (test_daemon.DaemonTests.test_shared_microphone_restores_after_last_owner) ... ok
+test_socket_deduplicates_state_but_initial_state_is_always_sent (test_daemon.DaemonTests.test_socket_deduplicates_state_but_initial_state_is_always_sent) ... ok
+test_status_caches_dependencies_until_refresh (test_daemon.DaemonTests.test_status_caches_dependencies_until_refresh) ... ok
+test_switch_restores_microphone (test_daemon.DaemonTests.test_switch_restores_microphone) ... ok
+test_test_mode_suppresses_and_requires_release (test_daemon.DaemonTests.test_test_mode_suppresses_and_requires_release) ... ok
+test_validation_does_not_overwrite_config (test_daemon.DaemonTests.test_validation_does_not_overwrite_config) ... ok
+test_watch_retries_discovery_and_failed_restore_without_busy_loop (test_daemon.DaemonTests.test_watch_retries_discovery_and_failed_restore_without_busy_loop) ... ok
+test_actual_argv_never_expands_shell (test_daemon.ProcessTests.test_actual_argv_never_expands_shell) ... ok
+test_actual_command_timeout (test_daemon.ProcessTests.test_actual_command_timeout) ... ok
+test_actual_process_output_is_bounded (test_daemon.ProcessTests.test_actual_process_output_is_bounded) ... ok
+test_daemon_shutdown_with_connected_client (test_daemon.ProcessTests.test_daemon_shutdown_with_connected_client) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 2.599s
+
+OK

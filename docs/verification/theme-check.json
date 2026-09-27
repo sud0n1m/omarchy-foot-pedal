@@ -1,0 +1,21 @@
+{
+  "before": {
+    "background": "#1a1b26",
+    "text": "#a9b1d6",
+    "accent": "#7aa2f7",
+    "font": "monospace",
+    "radius": 0
+  },
+  "light": {
+    "background": "#eff1f5"
+  },
+  "after": {
+    "background": "#1a1b26",
+    "text": "#a9b1d6",
+    "accent": "#7aa2f7",
+    "font": "monospace",
+    "radius": 0
+  },
+  "background_restored": true,
+  "page_preserved": true
+}

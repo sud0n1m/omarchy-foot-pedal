@@ -1,0 +1,80 @@
+[
+  {
+    "type": "color",
+    "name": "--color-popup",
+    "value": "#1a1b26",
+    "description": "Color.popups.background; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-text",
+    "value": "#a9b1d6",
+    "description": "Color.popups.text; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-secondary",
+    "value": "#8187a5",
+    "description": "Util.alpha(Color.popups.text, 0.72), composited for Paper; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-accent",
+    "value": "#7aa2f7",
+    "description": "Color.accent; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-control",
+    "value": "#20212d",
+    "description": "Style.normalFillAlpha / normalStateColor, composited; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-border",
+    "value": "#53576c",
+    "description": "Border.controlSpec(normal), foreground at 0.4; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-separator",
+    "value": "#313342",
+    "description": "Util.alpha(Color.popups.text, 0.16), composited; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-selected",
+    "value": "#343648",
+    "description": "Style.selectedFillAlpha / selectedStateColor, composited; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "color",
+    "name": "--color-pressed",
+    "value": "#393c4d",
+    "description": "Style.pressedFillAlpha / pressedStateColor, composited; current Tokyo Night preview only. Runtime binding, never fixed hex."
+  },
+  {
+    "type": "fontFamily",
+    "name": "--font-shell",
+    "value": "JetBrainsMono Nerd Font",
+    "description": "Style.font.family; inherit current shell font."
+  },
+  {
+    "type": "radius",
+    "name": "--radius-control",
+    "value": "0px",
+    "description": "Style.cornerRadius; current Hyprland rounding is 0."
+  },
+  {
+    "type": "spacing",
+    "name": "--spacing-panel",
+    "value": "18px",
+    "description": "Style.spacing.panelPadding"
+  },
+  {
+    "type": "spacing",
+    "name": "--spacing-gap",
+    "value": "14px",
+    "description": "Style.spacing.panelGap"
+  }
+]

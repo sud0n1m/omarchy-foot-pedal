@@ -1,0 +1,24 @@
+[
+  {
+    "panel": "closed",
+    "pid": 2385751,
+    "seconds": 30.03,
+    "cpu_percent_one_core": 0.0,
+    "voluntary_context_switches": 0,
+    "involuntary_context_switches": 0,
+    "rss_kib": 25588,
+    "pss_kib": 16482,
+    "unsolicited_state_packets": 0
+  },
+  {
+    "panel": "open",
+    "pid": 2385751,
+    "seconds": 30.029,
+    "cpu_percent_one_core": 0.0,
+    "voluntary_context_switches": 0,
+    "involuntary_context_switches": 0,
+    "rss_kib": 25612,
+    "pss_kib": 16504,
+    "unsolicited_state_packets": 0
+  }
+]
