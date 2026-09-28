@@ -262,7 +262,7 @@ Panel {
                         Row {spacing:Style.space(8);Action {text:"Keep editing";bordered:true;onClicked:root.discardPrompt=false} Action {text:"Discard";bordered:true;onClicked:{root.dirty=false;root.navigate("main")}}}
                     }
                     Column {
-                        visible:root.page==="main";width:parent.width;spacing:Style.spacing.panelGap
+                        visible:root.page==="main" && root.online;width:parent.width;spacing:Style.spacing.panelGap
                         Divider {}
                         Row {
                             width:parent.width
