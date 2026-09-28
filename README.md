@@ -56,13 +56,28 @@ input. Use **Test pedals** to check inputs without triggering their actions.
 
 ### USB permissions
 
-If the panel reports **Device access denied**, install the supplied rule from
-a terminal. It grants the active local seat access only to this pedal model:
+If the panel reports **Device access denied**, create the supplied rule from
+a terminal. It grants the active local seat access only to this pedal model.
+This command exclusively creates a new file: any existing path (including an
+identical rule or a symlink) causes an error without changing it. On an existing
+path, stop and inspect its ownership and contents with your administrator;
+do not delete, move, or overwrite it to force installation.
 
 ```bash
-sudo install -Dm644 ~/.config/omarchy/plugins/sudonim.foot-pedal/packaging/70-elgato-foot-pedal.rules /etc/udev/rules.d/70-elgato-foot-pedal.rules
-sudo udevadm control --reload-rules
+sudo python3 -c '
+import os, sys
+rule = sys.stdin.buffer.read()
+fd = os.open(sys.argv[1], os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+with os.fdopen(fd, "wb") as target:
+    target.write(rule)
+' /etc/udev/rules.d/70-elgato-foot-pedal.rules \
+  < ~/.config/omarchy/plugins/sudonim.foot-pedal/packaging/70-elgato-foot-pedal.rules \
+  && sudo udevadm control --reload-rules
 ```
+
+Keep a record if you create this rule: it is a manual system change and is not
+owned or removed by the plugin installer. If writing fails after file creation,
+inspect the new file before retrying; the command will not overwrite it.
 
 Unplug and reconnect the pedal afterward. Do not run the daemon as root or make
 all HID devices world-writable. No rule is needed if your system already grants
@@ -99,12 +114,21 @@ plugin. Removing just the plugin hides the panel; it does **not** stop the
 independently installed pedal service. Locally modified installed files are
 preserved with an explanatory error.
 
-If you installed the optional USB rule, remove it separately:
+The optional USB rule is a separate manual system change. There is deliberately
+no automatic rule deletion. First inspect the file and check package ownership:
 
 ```bash
-sudo rm /etc/udev/rules.d/70-elgato-foot-pedal.rules
-sudo udevadm control --reload-rules
+pacman -Qo /etc/udev/rules.d/70-elgato-foot-pedal.rules
+sudo cat /etc/udev/rules.d/70-elgato-foot-pedal.rules
 ```
+
+A “no package owns” result or matching rule contents does **not** prove this
+plugin created the file. If a package owns it, follow that package’s guidance.
+If its origin is uncertain or the path is a symlink, leave it alone. Only if you know you added the rule
+yourself and it is not package-owned, use `sudoedit` on that file to remove the
+pedal-specific line you added, preserving all other contents. Leave the file
+in place; an empty or comment-only rules file is harmless. Then run
+`sudo udevadm control --reload-rules` and reconnect the pedal.
 
 ## Development and verification
 

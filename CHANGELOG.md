@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- USB permission setup exclusively creates a new rule and refuses every existing
+  path. Replace unconditional rule deletion with manual ownership review and
+  removal of only the line the user added.
+
 - Remove uninstall from the main panel. Removal remains available through
   `foot-pedal-uninstall` followed by Omarchy’s plugin manager.
 

@@ -126,3 +126,21 @@ conflicting file aside themselves before retrying.
 unknown-file and modified-file collisions, assert that no other payload or
 receipt changes and no service command runs, and cover symlinks, invalid
 receipts, identical payload adoption, and known legacy-file recognition.
+
+
+## USB rule documentation review · 2026-09-28
+
+The optional setup command now uses `O_CREAT | O_EXCL` to refuse every existing
+rule path, even identical files and dangling symlinks. Reload runs only after
+successful creation. Removal instructions no longer delete the file: they
+require reviewing package ownership and provenance before manually removing
+only the line the user added, preserving other contents and leaving the file
+in place. Matching bytes or absence of a package owner is not treated as proof
+that this plugin created a rule.
+
+Four regression tests extract and execute the actual README Python snippet in
+a temporary directory without sudo. They cover fresh creation, repeat refusal,
+unrelated and identical rules, symlinks to existing and absent files, a FIFO,
+and a directory. Existing contents and metadata remain unchanged on refusal.
+All 51 tests pass. The rule still passes `udevadm verify`. No system rule was
+installed or removed during this review fix.
