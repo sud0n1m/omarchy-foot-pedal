@@ -5,7 +5,7 @@ connected; its process owns one `/dev/hidraw0` handle. Required Wayland,
 Hyprland and session-bus environment is present. Startup is enabled, dispatch
 is on, and **Workspaces + dictation** is active with no action errors.
 
-- [41 backend and lifecycle tests](backend-tests.txt) passed: original commands/press edges,
+- [47 backend and lifecycle tests](backend-tests.txt) passed: original commands/press edges,
   config validation and persistence, immutable built-ins, test suppression and
   ownership, disconnect, rapid release, pause/preset-change microphone restore,
   overlapping holds, crash recovery/retry, media routing, and per-pedal errors.
@@ -110,3 +110,19 @@ real microphone mute/unmute, or media playback action was triggered for testing.
 
 Physical reconnection and real pedal/microphone actuation remain manual
 acceptance items. The release has not been tested on a second physical machine.
+
+
+## Installer ownership review · 1.2.2
+
+The marketplace reviewer identified that setup could replace an unrelated file
+at a fixed install path. Setup now checks every destination before any payload
+write or service operation. Existing files must match their receipt hash, the
+current package bytes, or explicitly recorded hashes of the pre-receipt 1.1
+release. Symlinks, unknown files, invalid receipts, and locally modified managed
+files are preserved with a specific error. Users must back up and move a
+conflicting file aside themselves before retrying.
+
+47 tests pass. New regressions exercise every install target individually for
+unknown-file and modified-file collisions, assert that no other payload or
+receipt changes and no service command runs, and cover symlinks, invalid
+receipts, identical payload adoption, and known legacy-file recognition.

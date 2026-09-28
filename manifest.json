@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "sudonim.foot-pedal",
   "name": "Foot Pedal",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": "Colin Nederkoorn",
   "description": "Configurable Stream Deck Pedal presets, actions and input testing",
   "kinds": [

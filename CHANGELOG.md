@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.2
+
+- Preflight every installed path before any writes. Refuse unrelated files,
+  symlinks, modified managed files, and invalid receipts.
+- Recognize pre-receipt 1.1 installations only through explicit known hashes.
+- Add collision regressions for every target and verify all files remain
+  untouched when setup is refused.
+
 ## 1.2.1
 
 - Filtered libudev notifications replace unplugged-state polling. No helper

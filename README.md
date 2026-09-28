@@ -35,7 +35,10 @@ omarchy plugin add https://github.com/sud0n1m/omarchy-foot-pedal.git --enable
 Click the three-pedal bar icon, then **Install controls**. This explicit step
 installs and starts the per-user background service and adds a **Foot Pedal**
 app launcher. No administrator access is requested. The plugin itself does
-not install anything automatically. Saved presets are preserved.
+not install anything automatically. Saved presets are preserved. Setup checks every destination before writing:
+unrelated files, symlinks, or locally modified installed files are preserved
+and reported. Back up and move a conflicting file aside yourself before
+retrying. Known pre-receipt 1.1 files are recognized by explicit hashes.
 
 For terminal setup after adding the plugin:
 

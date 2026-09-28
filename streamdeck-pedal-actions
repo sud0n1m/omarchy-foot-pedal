@@ -20,7 +20,7 @@ import tempfile
 import time
 import uuid
 
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 VENDOR_ID, PRODUCT_ID = "0fd9", "0086"
 CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "foot-pedal/config.json"
 RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")) / "foot-pedal"

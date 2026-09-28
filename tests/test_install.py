@@ -59,6 +59,67 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(config.read_bytes(), custom)
         self.assertNotIn(("systemctl", "--user", "enable", manage.UNIT), self.calls)
 
+    def test_fresh_install_refuses_each_unrelated_existing_target_before_any_write(self):
+        for key, (target, _) in self.manager.targets.items():
+            with self.subTest(key=key):
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(b"unrelated user file")
+                with self.assertRaisesRegex(RuntimeError, "Unrecognized existing"):
+                    self.manager.install()
+                self.assertEqual(target.read_bytes(), b"unrelated user file")
+                self.assertEqual(self.calls, [])
+                self.assertFalse(self.manager.receipt.exists())
+                for other, _ in self.manager.targets.values():
+                    if other != target:self.assertFalse(other.exists())
+                target.unlink()
+
+    def test_upgrade_refuses_each_modified_target_before_any_write(self):
+        self.manager.install();self.calls.clear()
+        receipt = self.manager.receipt.read_bytes()
+        originals = {target: target.read_bytes() for target, _ in self.manager.targets.values()}
+        for key, (target, _) in self.manager.targets.items():
+            with self.subTest(key=key):
+                target.write_bytes(b"locally customized")
+                with self.assertRaisesRegex(RuntimeError, "Locally modified"):
+                    self.manager.install()
+                self.assertEqual(self.calls, [])
+                self.assertEqual(self.manager.receipt.read_bytes(), receipt)
+                for other, original in originals.items():
+                    self.assertEqual(other.read_bytes(), b"locally customized" if other == target else original)
+                target.write_bytes(originals[target])
+
+    def test_fresh_install_preserves_symlink_target(self):
+        target = self.manager.bin / "foot-pedal"
+        target.parent.mkdir(parents=True)
+        outside = self.home / "unrelated"
+        outside.write_text("keep me")
+        target.symlink_to(outside)
+        with self.assertRaisesRegex(RuntimeError, "not a managed regular file"):
+            self.manager.install()
+        self.assertTrue(target.is_symlink());self.assertEqual(outside.read_text(), "keep me")
+        self.assertEqual(self.calls, [])
+
+    def test_invalid_receipt_blocks_updates(self):
+        self.manager.install();self.calls.clear()
+        self.manager.receipt.write_text("invalid")
+        with self.assertRaisesRegex(RuntimeError, "Invalid installation receipt"):
+            self.manager.install()
+        self.assertEqual(self.manager.receipt.read_text(), "invalid")
+        self.assertEqual(self.calls, [])
+
+    def test_identical_payload_is_recognized_without_receipt(self):
+        self.manager.install();self.manager.receipt.unlink();self.calls.clear()
+        self.assertTrue(self.manager.install()["ok"])
+
+    def test_legacy_hashes_are_explicit_and_known_daemon_is_accepted(self):
+        import hashlib
+        legacy = (ROOT / "docs/backups/original-daemon.py").read_bytes()
+        hashes = json.loads((ROOT / "packaging/legacy-install.json").read_text())["sha256"]
+        self.assertIn(hashlib.sha256(legacy).hexdigest(), hashes['streamdeck-pedal-actions'])
+        target = self.manager.bin / "streamdeck-pedal-actions"
+        target.parent.mkdir(parents=True);target.write_bytes(legacy)
+        self.assertTrue(self.manager.install()["ok"])
+
     def test_failed_start_is_reported_and_remains_removable(self):
         self.fail = "restart"
         with self.assertRaisesRegex(RuntimeError, "Simulated failure"):

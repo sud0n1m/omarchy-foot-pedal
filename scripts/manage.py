@@ -64,11 +64,37 @@ class Manager:
         except FileNotFoundError:
             pass  # Desktop-file-utils is optional; the .desktop file still works.
 
+    def preflight(self, payload):
+        """Identify every existing target before replacing any installed file."""
+        previous = None
+        if self.receipt.exists() or self.receipt.is_symlink():
+            if self.receipt.is_symlink():
+                raise RuntimeError(f"Installation receipt is a symlink; preserved: {self.receipt}")
+            try:
+                previous = json.loads(self.receipt.read_text())["files"]
+                if not isinstance(previous, dict) or any(not isinstance(v, str) or len(v) != 64 for v in previous.values()):
+                    raise ValueError("Invalid file hashes")
+            except (OSError, ValueError, KeyError, TypeError) as e:
+                raise RuntimeError(f"Invalid installation receipt preserved: {self.receipt}. Restore it from backup before updating.") from e
+        legacy = json.loads((self.repo / "packaging/legacy-install.json").read_text())["sha256"]
+        for key, (target, _) in self.targets.items():
+            if not target.exists() and not target.is_symlink():
+                continue
+            if target.is_symlink() or not target.is_file():
+                raise RuntimeError(f"Existing path is not a managed regular file; preserved: {target}")
+            digest = hashlib.sha256(target.read_bytes()).hexdigest()
+            if previous is not None and key in previous:
+                if digest != previous[key]:
+                    raise RuntimeError(f"Locally modified file preserved: {target}. Back it up and move it aside before retrying setup.")
+            elif digest != hashlib.sha256(payload[key]).hexdigest() and digest not in legacy.get(key, []):
+                raise RuntimeError(f"Unrecognized existing file preserved: {target}. Back it up and move it aside before retrying setup.")
+
     def install(self):
         # Read the complete payload before changing installed files.
         version = json.loads((self.repo / "manifest.json").read_text())["version"]
         payload = {key: (self.repo / key).read_bytes() for key in self.targets}
         default_config = (self.repo / "config.json").read_bytes()
+        self.preflight(payload)
         loaded = self.command("systemctl", "--user", "show", UNIT, "-p", "LoadState", "--value").stdout.strip()
         first_install = loaded == "not-found"
         # Preserve an existing user's disabled startup preference on upgrades.
