@@ -13,6 +13,7 @@ import re
 import shlex
 import shutil
 import signal
+import socket
 import subprocess
 import sys
 import tempfile
@@ -153,6 +154,9 @@ class DeviceMonitor:
             if self.lib.udev_monitor_enable_receiving(self.monitor)<0:raise OSError("Could not subscribe to udev events")
             self.fd=self.lib.udev_monitor_get_fd(self.monitor)
             if self.fd<0:raise OSError("Could not get udev socket")
+            # libudev may silently create an unsubscribed monitor in containers.
+            with socket.fromfd(self.fd,socket.AF_NETLINK,socket.SOCK_RAW,15) as check:
+                if not check.getsockname()[1]&2:raise OSError("Processed udev notifications unavailable")
         except BaseException:
             self.close();raise
     def receive(self):
