@@ -1,3 +1,45 @@
+# Rust 2.0 verification · 2026-09-28
+
+The installed plugin starts a Rust worker from its own folder. The previous
+Python user service and copied launchers were removed using their receipt-aware
+uninstaller. The existing saved configuration remained byte-for-byte unchanged,
+including the owner's active custom preset. Omarchy's native theme styling is
+retained. [Current panel](08-rust-main.png).
+
+- 17 Rust tests pass, including 510 legacy Python shlex compatibility vectors,
+  input edges, first-held suppression, test ownership/rearming/expiry, invalid
+  config preservation, preset persistence, media selection, shared microphone
+  holds, quick release, pause/disconnect/preset-change restoration, crash recovery,
+  and retained recovery on failure. A FIFO exercises actual HID watch dispatch.
+- Six black-box tests launch the compiled binary with isolated config/runtime
+  directories and mocked action tools. They cover installer-free first launch,
+  duplicate-worker refusal, config save/reload, invalid config preservation,
+  oversized requests, connected-client shutdown, and plugin-owner socket closure.
+- The optional Rust USB-rule helper is tested against existing unrelated and
+  identical files, dangling/existing symlinks, directories and FIFOs. None are
+  replaced. No privileged rule was installed on this machine.
+- Native UI preset navigation and test start/end passed. The real pedal is now
+  connected and detected. No real dictation, media or microphone action was
+  triggered as part of verification; physical actuation remains a manual check.
+- Actual plugin disable/enable stops/restarts the worker. The worker uses a
+  private owner socket so QML destruction closes its lifetime connection,
+  allowing microphone restoration before exit. A Rust test holds a mock
+  microphone and verifies restoration after this exact owner-socket closure.
+- [Connected idle samples](rust-idle-measurement.json) cover the panel closed
+  and open. [Disconnected fixture sample](rust-disconnected-idle-measurement.json)
+  runs the real binary in a private mount namespace with HID discovery hidden;
+  it leaves the host's connected pedal untouched. This is not a physical unplug
+  test. All samples recorded zero CPU ticks and zero unsolicited packets.
+- Rust formatting, Clippy with warnings denied, Omarchy manifest validation and
+  `udevadm verify` pass. The source and bundled binary have separate black-box
+  checks in CI. Runtime binary provenance and platform limits are in
+  [the build notes](../build.md).
+
+The measurements exclude the existing Omarchy shell and do not measure action
+execution cost. Earlier Python measurements/screenshots below are historical.
+
+---
+
 # Installation verification · 2026-09-27
 
 Installed and running on Omaxps. The service reports the physical Elgato pedal

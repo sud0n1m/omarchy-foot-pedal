@@ -1,0 +1,11 @@
+{
+  "fixture": "Private mount namespace with empty /sys/class/hidraw; physical pedal remains untouched",
+  "seconds": 30.03,
+  "connected": false,
+  "discovery": "udev",
+  "cpu_ticks": 0,
+  "pss_kib": 1155,
+  "voluntary_context_switches": 0,
+  "involuntary_context_switches": 0,
+  "unsolicited_state_packets": 0
+}

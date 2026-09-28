@@ -35,7 +35,7 @@ results = []
 for opened in (False, True):
     command('omarchy-shell', 'sudonim.foot-pedal', 'open' if opened else 'close')
     time.sleep(1)
-    pid = int(command('systemctl', '--user', 'show', 'streamdeck-pedal-actions.service', '-p', 'MainPID', '--value'))
+    pid = int(json.loads(command('omarchy-shell', 'sudonim.foot-pedal-worker', 'status'))['pid'])
     with socket.socket(socket.AF_UNIX) as client:
         client.connect(os.environ['XDG_RUNTIME_DIR'] + '/foot-pedal/control.sock')
         initial = b''
@@ -66,4 +66,4 @@ for opened in (False, True):
     }
     results.append(result)
     print(json.dumps(result), flush=True)
-Path(__file__).with_name('disconnected-idle-measurement.json' if args.disconnected else 'idle-measurement.json').write_text(json.dumps(results, indent=2) + '\n')
+Path(__file__).with_name('rust-disconnected-idle-measurement.json' if args.disconnected else 'rust-idle-measurement.json').write_text(json.dumps(results, indent=2) + '\n')

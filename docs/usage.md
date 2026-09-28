@@ -1,10 +1,10 @@
-# Foot Pedal
+# Elgato Foot Pedal
 
 First installed 2026-09-27. A native Omarchy panel and a single-owner background
 service for the Elgato Stream Deck Pedal (`0fd9:0086`).
 
-Open **Foot Pedal** in the app launcher, click the three-pedal icon next to
-Wave XLR in the bar, or run `foot-pedal`.
+Click the three-pedal bar icon, or run
+`omarchy-shell sudonim.foot-pedal open`.
 
 The active preset is **Workspaces + dictation**:
 
@@ -31,27 +31,24 @@ actions; closing the panel ends testing and restores the prior pause state.
   There is no implicit shell expansion. They must finish within ten seconds;
   output capture is bounded. Existing actions may finish when new presses are
   paused. Failures appear beside the affected pedal.
-- **Pedal actions** pauses dispatch. **Start at sign-in** enables/disables the
-  user service for future sessions without stopping this session's controls.
+- **Pedal actions** pauses dispatch. Controls start at sign-in while
+  the plugin is enabled; disabling the plugin stops the worker.
 - Press Tab to navigate, Enter/Space to activate controls, and Escape to go back.
   Unsaved edits can be kept or discarded; dismissing the popup retains the draft
   until the shell exits/reloads. The daemon does not depend on the open panel.
 
 ## Installed files and persistence
 
-| Installed path | Repository snapshot |
+| Path | Purpose |
 | --- | --- |
-| `~/.local/bin/streamdeck-pedal-actions` | [Daemon and control CLI](../streamdeck-pedal-actions) |
-| `~/.config/systemd/user/streamdeck-pedal-actions.service` | [User service](../streamdeck-pedal-actions.service) |
-| `~/.config/omarchy/plugins/sudonim.foot-pedal/` | [Native QML panel](../plugin) |
-| `~/.local/bin/foot-pedal` | [Launcher](../foot-pedal) |
-| `~/.local/share/applications/foot-pedal.desktop` | [Desktop entry](../foot-pedal.desktop) |
-| `~/.config/foot-pedal/config.json` | [Initial installed configuration](../config.json) |
+| `~/.config/omarchy/plugins/sudonim.foot-pedal/` | Native QML panel/service and bundled Rust worker |
+| `~/.config/foot-pedal/config.json` | Saved presets and pause state |
+| `$XDG_RUNTIME_DIR/foot-pedal/` | Local sockets, exclusive lock and microphone recovery journal |
 
 The configuration stores schema version, pause state, active preset and custom
 presets. Writes validate the entire preset, atomically replace the file, and
 fsync it. Existing invalid configuration is retained and dispatch starts paused
-with a visible error. The installer does not overwrite an existing config.
+with a visible error. Plugin installation does not modify an existing config.
 Update its snapshot when intentionally changing saved defaults later.
 
 The user-private socket is `$XDG_RUNTIME_DIR/foot-pedal/control.sock` (0600),
@@ -84,8 +81,7 @@ There is no private theme setting or hardcoded Tokyo Night palette.
 ## Installation and removal
 
 See the [current installation, update, USB access, and removal instructions](../README.md).
-Use Omarchy to install the plugin and its explicit Install controls action for
-the companion service. Saved presets survive upgrades and removal.
+Omarchy starts the bundled Rust worker when the plugin is enabled. Saved presets survive upgrades and removal.
 
 ## Verification and troubleshooting
 
@@ -94,21 +90,19 @@ results and remaining physical checks. The [Paper design](design/README.md)
 is the source of the interaction/layout decisions.
 
 ```bash
-streamdeck-pedal-actions --status
+~/.config/omarchy/plugins/sudonim.foot-pedal/bin/foot-pedal --status
 omarchy-shell sudonim.foot-pedal-status status
-systemctl --user status streamdeck-pedal-actions.service
-journalctl --user -u streamdeck-pedal-actions.service -n 30
-python -m unittest discover -s tests -v
+omarchy-shell sudonim.foot-pedal-worker status
+cargo test --locked
 ```
 
-If controls are offline, **Start controls** starts the user service. If the pedal
+If controls are offline, **Start controls** retries the plugin worker. If the pedal
 is disconnected or access is denied, the UI distinguishes those conditions.
 Configuration remains editable while the hardware is unplugged.
 
 ## Rollback
 
-The original daemon/service are in [backups](backups). To restore only the old
-behavior, disable `sudonim.foot-pedal` using `omarchy plugin disable`, install
-`docs/backups/original-daemon.py` over `~/.local/bin/streamdeck-pedal-actions`, install
-`docs/backups/original.service` over its user unit, reload systemd, and restart the
-service. Keep the saved custom config for a later upgrade.
+Disable the version 2 plugin before using an older worker. Use a separate
+checkout of the `v1.2.2` tag and its documented, ownership-checking installer;
+do not blindly overwrite existing executables or service files. Saved presets
+remain compatible. Historical original scripts are retained in [backups](backups).

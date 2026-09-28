@@ -1,13 +1,18 @@
 # Changelog
 
-## Unreleased
+## 2.0.0
 
-- USB permission setup exclusively creates a new rule and refuses every existing
-  path. Replace unconditional rule deletion with manual ownership review and
-  removal of only the line the user added.
-
-- Remove uninstall from the main panel. Removal remains available through
-  `foot-pedal-uninstall` followed by Omarchy’s plugin manager.
+- Rewrite the background worker in Rust, retaining the existing preset format,
+  original mappings, action types, microphone recovery and local socket UI.
+- Bundle a Linux x86-64 binary so standard plugin add/enable needs no build or
+  companion-service install. The Omarchy service entry point owns its lifetime.
+- Disable/remove stops the worker; sign-in starts enabled controls. Replace
+  separate install/update/uninstall and startup controls with plugin lifecycle.
+- Add explicit one-time migration instructions for the old Python user service.
+- Rename the utility Elgato Foot Pedal and add an original pedal icon and preview.
+- Preserve exclusive-create USB rule setup in an optional Rust command, with
+  manual provenance-aware removal instructions.
+- Measure roughly 1.4 MiB PSS and zero idle CPU ticks on the installed Rust worker.
 
 ## 1.2.2
 

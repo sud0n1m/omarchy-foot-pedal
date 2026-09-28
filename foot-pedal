@@ -1,2 +1,0 @@
-#!/bin/sh
-exec omarchy-shell shell summon sudonim.foot-pedal

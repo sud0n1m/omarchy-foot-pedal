@@ -1,0 +1,2756 @@
+[
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "\"\"",
+    "expected": [
+      ""
+    ]
+  },
+  {
+    "input": "''",
+    "expected": [
+      ""
+    ]
+  },
+  {
+    "input": "#literal hash",
+    "expected": [
+      "#literal",
+      "hash"
+    ]
+  },
+  {
+    "input": "\"two words\" \"$(touch /tmp/no)\"",
+    "expected": [
+      "two words",
+      "$(touch /tmp/no)"
+    ]
+  },
+  {
+    "input": "\\",
+    "expected": null
+  },
+  {
+    "input": "\"\\$variable\"",
+    "expected": [
+      "\\$variable"
+    ]
+  },
+  {
+    "input": "one\\\ntwo",
+    "expected": [
+      "one\ntwo"
+    ]
+  },
+  {
+    "input": "\"\\`literal\\`\"",
+    "expected": [
+      "\\`literal\\`"
+    ]
+  },
+  {
+    "input": "a\rb",
+    "expected": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "input": "b#x`\r#\tb`a\"\nxb#\"a",
+    "expected": [
+      "b#x`",
+      "#",
+      "b`a\nxb#a"
+    ]
+  },
+  {
+    "input": "é\\\t_#_'x'_\r\"$aa",
+    "expected": null
+  },
+  {
+    "input": "b''aé$$a \r\t_y  \r\rx #a\"",
+    "expected": null
+  },
+  {
+    "input": "x`b_\tx_x",
+    "expected": [
+      "x`b_",
+      "x_x"
+    ]
+  },
+  {
+    "input": "\t _\r\r\"\"#'a",
+    "expected": null
+  },
+  {
+    "input": "$\"a\na'#\nxé$\r",
+    "expected": null
+  },
+  {
+    "input": "\\\\ay",
+    "expected": [
+      "\\ay"
+    ]
+  },
+  {
+    "input": "$\n\n$x\na\n_`\\ \"\n\\'bx\r\\aa`y`\r\r#_\"",
+    "expected": [
+      "$",
+      "$x",
+      "a",
+      "_` \n\\'bx\r\\aa`y`\r\r#_"
+    ]
+  },
+  {
+    "input": "é",
+    "expected": [
+      "é"
+    ]
+  },
+  {
+    "input": "`é'$\t",
+    "expected": null
+  },
+  {
+    "input": "x`y y\n#\nxé\ty_ \\\n$é\"y'",
+    "expected": null
+  },
+  {
+    "input": "éx\n$\tyy'\t_ \nxy_\"\\x$b b\\$\tax",
+    "expected": null
+  },
+  {
+    "input": "ééx",
+    "expected": [
+      "ééx"
+    ]
+  },
+  {
+    "input": "\"\t'_a_$\té$x\n\\ \nbx'xb\r\"\\\"aby '\"$_a",
+    "expected": null
+  },
+  {
+    "input": "\\#éx'\"\"`\\\r\nx#\t\\`'$y`\"\n$\naééé`\ré\\'a",
+    "expected": null
+  },
+  {
+    "input": " $\"\tb_ $\\a`\"$\t\r'\t$\\ya#\r\tb\\bx_",
+    "expected": null
+  },
+  {
+    "input": "y\\\\\réa__é\réébx# \t'yy''\r#a\ré\"x _",
+    "expected": null
+  },
+  {
+    "input": "\nx \txé\nyx\\ $ba__aé'$b\t\"\\'\\",
+    "expected": null
+  },
+  {
+    "input": "\r$x'é`\r",
+    "expected": null
+  },
+  {
+    "input": "a_$x\t\ry $y$\r#aa'\né'#é`#\n#xb#a \n#",
+    "expected": [
+      "a_$x",
+      "y",
+      "$y$",
+      "#aa\né#é`#",
+      "#xb#a",
+      "#"
+    ]
+  },
+  {
+    "input": "\r$#`b\"#\tb\t'\té\r`yyéa#b\ty#a",
+    "expected": null
+  },
+  {
+    "input": "\t\\_\\a\na",
+    "expected": [
+      "_a",
+      "a"
+    ]
+  },
+  {
+    "input": "é\ry$\\`\t_ y`#\\\ny\n`é `",
+    "expected": [
+      "é",
+      "y$`",
+      "_",
+      "y`#\ny",
+      "`é",
+      "`"
+    ]
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "$_\"`$y#ab\n\\\né`\tya\r\\\"\t\ry",
+    "expected": null
+  },
+  {
+    "input": "''#\"b'$#\n é'\t`b#\nx$y _#bx`'",
+    "expected": null
+  },
+  {
+    "input": "`\n ax\r",
+    "expected": [
+      "`",
+      "ax"
+    ]
+  },
+  {
+    "input": "#y#\"y\\\"\\\"x`é\txyyx\r_y",
+    "expected": null
+  },
+  {
+    "input": "\r$\nyx\t\"\"\t\r'\taé\\é'x$\ré`$y\"byba`",
+    "expected": null
+  },
+  {
+    "input": "\tay \"x\\\\\\$\n`\"aa\t\n## a#\n",
+    "expected": [
+      "ay",
+      "x\\\\$\n`aa",
+      "##",
+      "a#"
+    ]
+  },
+  {
+    "input": "y\n\t\n\\'bé\"___\n\t'b\t\\",
+    "expected": null
+  },
+  {
+    "input": "_\r`\"y$bbx\n`#",
+    "expected": null
+  },
+  {
+    "input": "\"$' y\"\"\r\t\t'\r'x\\`é \"\r'\té''#'\r$",
+    "expected": [
+      "$' y\r\t\t'\r'x\\`é ",
+      "\té#",
+      "$"
+    ]
+  },
+  {
+    "input": "by_éb`\\ayéyb\r\t\tb\t",
+    "expected": [
+      "by_éb`ayéyb",
+      "b"
+    ]
+  },
+  {
+    "input": "y`'x\"\réxyéabbb\\\"_''b_",
+    "expected": null
+  },
+  {
+    "input": "_\r_ya`\\\" \tx''\r'ayxy_",
+    "expected": null
+  },
+  {
+    "input": "b\r\\\t",
+    "expected": [
+      "b",
+      "\t"
+    ]
+  },
+  {
+    "input": "é\t_  \n\r  \\ax\"#$\\x$'` \t$é`\tx\t`'é\r",
+    "expected": null
+  },
+  {
+    "input": "\\ '\\\r$a'\\$_ \"\"#`\"y\r\r_ éy\" \r'ax'`x",
+    "expected": [
+      " \\\r$a$_",
+      "#`y\r\r_ éy",
+      "ax`x"
+    ]
+  },
+  {
+    "input": "`\t$\\\rb\\$#aaa_'b'ay\\#\"\r\t \r\\#\"##\t",
+    "expected": [
+      "`",
+      "$\rb$#aaa_bay#\r\t \r\\###"
+    ]
+  },
+  {
+    "input": "é\t",
+    "expected": [
+      "é"
+    ]
+  },
+  {
+    "input": "é\"#`x \\\t#\n`\"y#\n\"\n\r",
+    "expected": null
+  },
+  {
+    "input": "y\"_yé\rb#a_'é`ab\\\t \t y_\"\\",
+    "expected": null
+  },
+  {
+    "input": "y_\r'`\\x`\\\n $ \r\tbé\r$'\t_'#\r\r xx",
+    "expected": null
+  },
+  {
+    "input": "\n \"y",
+    "expected": null
+  },
+  {
+    "input": "\t\t$\"' x\ré$_y",
+    "expected": null
+  },
+  {
+    "input": "`b`'`b\rayy#",
+    "expected": null
+  },
+  {
+    "input": "#\\'\r#$\ry$\\éa'\"\n",
+    "expected": null
+  },
+  {
+    "input": "\"\tx$#\t# \"é\na`\r#y'\t\t\rb$\\\t\ty",
+    "expected": null
+  },
+  {
+    "input": "'aé$\\ y\tyxa\"xyb é' y\\`_\"",
+    "expected": null
+  },
+  {
+    "input": "ab$yy'",
+    "expected": null
+  },
+  {
+    "input": "\tab' '\n\rax'#éy\t_",
+    "expected": null
+  },
+  {
+    "input": "\r\t",
+    "expected": []
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "ax'\\éa\t\"_`\\'é\\\na\nb\t `$ é\tay",
+    "expected": [
+      "ax\\éa\t\"_`\\é\na",
+      "b",
+      "`$",
+      "é",
+      "ay"
+    ]
+  },
+  {
+    "input": "'\"__` $_\ra",
+    "expected": null
+  },
+  {
+    "input": " #",
+    "expected": [
+      "#"
+    ]
+  },
+  {
+    "input": "#'_a\tx#\t_\"'\"\n'\ta\\xa\\\nx",
+    "expected": null
+  },
+  {
+    "input": "$$#yx\\b\"\\`\txy#axyxx$ '\r",
+    "expected": null
+  },
+  {
+    "input": "\ré_\\$\\y'\n\ryébx \rb#`#a\\_é",
+    "expected": null
+  },
+  {
+    "input": "x\\\t#b`x \tbé\t\\\"$éxé\n\n\"\\a x`_xé_",
+    "expected": null
+  },
+  {
+    "input": "y\t#é`béy#\"\"ya#b\nb$$",
+    "expected": [
+      "y",
+      "#é`béy#ya#b",
+      "b$$"
+    ]
+  },
+  {
+    "input": "_ya",
+    "expected": [
+      "_ya"
+    ]
+  },
+  {
+    "input": "\\_\\`\t\r\t\rx`",
+    "expected": [
+      "_`",
+      "x`"
+    ]
+  },
+  {
+    "input": "$#é`\"\n`éé _\"'`'#'yx\t\"\\` '$\réabx",
+    "expected": [
+      "$#é`\n`éé _`#yx\t\"\\` $",
+      "éabx"
+    ]
+  },
+  {
+    "input": "$\t #é\"b# `xb\néb`\t`\"\\_$abba`",
+    "expected": [
+      "$",
+      "#éb# `xb\néb`\t`_$abba`"
+    ]
+  },
+  {
+    "input": "\rb\t\n`_\\éx_\\_b'\\'$b$_\r\" \t\\y",
+    "expected": null
+  },
+  {
+    "input": "__y\"`\r$\"$\t\"",
+    "expected": null
+  },
+  {
+    "input": "yé\"",
+    "expected": null
+  },
+  {
+    "input": "#\"_\na`_\t '\"y'\\\n\"`y xé#",
+    "expected": null
+  },
+  {
+    "input": "\rayé\"é\t\r\n`\t\\yx\"#",
+    "expected": [
+      "ayéé\t\r\n`\t\\yx#"
+    ]
+  },
+  {
+    "input": "'_\"y_\"\t_\réaéb\"_ é\"é#\r_#'\t y`a\\\ry",
+    "expected": [
+      "_\"y_\"\t_\réaéb\"_ é\"é#\r_#",
+      "y`a\ry"
+    ]
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "\" b#b _'_aa\n#é\nab$",
+    "expected": null
+  },
+  {
+    "input": "a\\\\y\r\"\tb`y\n \n\\\r#`_y\n\r\r `é",
+    "expected": null
+  },
+  {
+    "input": "\t\ta\téb",
+    "expected": [
+      "a",
+      "éb"
+    ]
+  },
+  {
+    "input": "y$\r`xxyé\t\"a y\néx$  é",
+    "expected": null
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "aa$yb'#`\"\"y\"\\`x\ryb\\\ry#",
+    "expected": null
+  },
+  {
+    "input": "\ny\\baé$é\né'$",
+    "expected": null
+  },
+  {
+    "input": "#$x`\"b\"\"\\'_\\\n\tyx \r\\`xx",
+    "expected": null
+  },
+  {
+    "input": "'\n\n_'`$\\'é #\r\t",
+    "expected": [
+      "\n\n_`$'é",
+      "#"
+    ]
+  },
+  {
+    "input": "é \n\"y#a\"\"x\t\"\ra_",
+    "expected": [
+      "é",
+      "y#ax\t",
+      "a_"
+    ]
+  },
+  {
+    "input": "a'\"\"\\b\r \t\ty",
+    "expected": null
+  },
+  {
+    "input": "b\n'$\"\n\"",
+    "expected": null
+  },
+  {
+    "input": "\r\\#\"x'`\r'_ \taa_\\éb\ra \r$ \r'",
+    "expected": null
+  },
+  {
+    "input": "$é`_\t#\n\nb`\"_\r$  é \r\ty\r$`\"b\n#",
+    "expected": [
+      "$é`_",
+      "#",
+      "b`_\r$  é \r\ty\r$`b",
+      "#"
+    ]
+  },
+  {
+    "input": " \\'\n$\r\t\t $éé#b#\r '\"b_'b\n$$`xé",
+    "expected": [
+      "'",
+      "$",
+      "$éé#b#",
+      "\"b_b",
+      "$$`xé"
+    ]
+  },
+  {
+    "input": "y_é'#\" a`\r`\\",
+    "expected": null
+  },
+  {
+    "input": "bxé_#",
+    "expected": [
+      "bxé_#"
+    ]
+  },
+  {
+    "input": "`\"é\"`\r`a\"a'_x\r\n y\t\"_'\"x$_\\\t",
+    "expected": null
+  },
+  {
+    "input": "ébbx`é\r`é\t\r\t\\",
+    "expected": null
+  },
+  {
+    "input": "\nx$x$'\\_a\né\\'`\ny \r ``\t é$\ta `yax",
+    "expected": [
+      "x$x$\\_a\né\\`",
+      "y",
+      "``",
+      "é$",
+      "a",
+      "`yax"
+    ]
+  },
+  {
+    "input": "\"\\'\\_\\\n'xb#\\#yéx\n\r\"b\ta\\$\\$`$`\r\n",
+    "expected": [
+      "\\'\\_\\\n'xb#\\#yéx\n\rb",
+      "a$$`$`"
+    ]
+  },
+  {
+    "input": "$x\"\tx'\n yy$#_ \"'b\n\t",
+    "expected": null
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "éxya#y\n_\nxx\\\\ x'\"b\nybbyx# a\"",
+    "expected": null
+  },
+  {
+    "input": "` 'y'\"\" xé'\t\"",
+    "expected": null
+  },
+  {
+    "input": "\"\r\tb#",
+    "expected": null
+  },
+  {
+    "input": "yayéx`",
+    "expected": [
+      "yayéx`"
+    ]
+  },
+  {
+    "input": "#",
+    "expected": [
+      "#"
+    ]
+  },
+  {
+    "input": "\n\té_'",
+    "expected": null
+  },
+  {
+    "input": "\nay\"#'x\\'\"\t#éx\\#y",
+    "expected": [
+      "ay#'x\\'",
+      "#éx#y"
+    ]
+  },
+  {
+    "input": "é\r \t\\\\\n\n\r\t_ax`\t\tya\n_aa \r$ \"\r",
+    "expected": null
+  },
+  {
+    "input": "\"a\t\ryaé \taa_$#``éy`aé$_y_\"_a",
+    "expected": [
+      "a\t\ryaé \taa_$#``éy`aé$_y__a"
+    ]
+  },
+  {
+    "input": "\t\"'b_'\r aé'\n\\#",
+    "expected": null
+  },
+  {
+    "input": "b\n$\"\"\néy_$`#b_#$$x \" x\r\"'\té$'b",
+    "expected": [
+      "b",
+      "$",
+      "éy_$`#b_#$$x",
+      " x\r\té$b"
+    ]
+  },
+  {
+    "input": " ",
+    "expected": []
+  },
+  {
+    "input": "y",
+    "expected": [
+      "y"
+    ]
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "x$x` \ta\téx\r'xa",
+    "expected": null
+  },
+  {
+    "input": "''b'\ny\\é\na'$bb$ayéé\n\ty\t'\"$`\r$ ",
+    "expected": null
+  },
+  {
+    "input": "#$\"\"#\n_yy_\r$_#$éy#é_'y` yb\r\nx$``",
+    "expected": null
+  },
+  {
+    "input": "x $b \t$b\"b_\"\r'##_\\aax\n",
+    "expected": null
+  },
+  {
+    "input": "$\"\rbéy\r$ba\n##y #x\n__\r\\",
+    "expected": null
+  },
+  {
+    "input": "xx\n\t\n \t $\t\t\r''x\"x\\\"`'$y_\\'`\"",
+    "expected": [
+      "xx",
+      "$",
+      "xx\"`'$y_\\'`"
+    ]
+  },
+  {
+    "input": "\ta\ra$\r\r\\\n\rxé\t$xyy\t",
+    "expected": [
+      "a",
+      "a$",
+      "\n",
+      "xé",
+      "$xyy"
+    ]
+  },
+  {
+    "input": "éyxb\"$$\\\\'b\téb_b$ \r` $b$a\n'",
+    "expected": null
+  },
+  {
+    "input": "a_\n\"'x_`$a ba\t\\é\té\r `y`'$$\rb\r\nba\"#",
+    "expected": [
+      "a_",
+      "'x_`$a ba\t\\é\té\r `y`'$$\rb\r\nba#"
+    ]
+  },
+  {
+    "input": "\n\"\n#\"\t#`\ra`x#xy#` \n'``b$",
+    "expected": null
+  },
+  {
+    "input": "#",
+    "expected": [
+      "#"
+    ]
+  },
+  {
+    "input": "`#$\t$x_\"\" xax_x'",
+    "expected": null
+  },
+  {
+    "input": " \né`x\r'`",
+    "expected": null
+  },
+  {
+    "input": "`  \\\"x `\t__y\r_$$\\",
+    "expected": null
+  },
+  {
+    "input": "y\\\"é\n`\ry \té` _ b$\ré#a_\r",
+    "expected": [
+      "y\"é",
+      "`",
+      "y",
+      "é`",
+      "_",
+      "b$",
+      "é#a_"
+    ]
+  },
+  {
+    "input": "#x\t\t\r\n\"_'`#\nxb$b$x\n_#\r##\t\ta \r",
+    "expected": null
+  },
+  {
+    "input": "a'\n\txéay`$\"\n$\"x\\'b",
+    "expected": [
+      "a\n\txéay`$\"\n$\"x\\b"
+    ]
+  },
+  {
+    "input": "`'éx'\n\r",
+    "expected": [
+      "`éx"
+    ]
+  },
+  {
+    "input": "yy'_b#_é\n\t",
+    "expected": null
+  },
+  {
+    "input": "#\"\ny\n\t\n'$#\n$\\é\rab`yx#b",
+    "expected": null
+  },
+  {
+    "input": "#_\t\\y\n\"\\\"\" ##é\\\\'y`\n\\\tx `_\"`\"$'",
+    "expected": [
+      "#_",
+      "y",
+      "\"",
+      "##é\\y`\n\\\tx `_\"`\"$"
+    ]
+  },
+  {
+    "input": "y y``\nx\n`\\\ry\t'$\n_é\\a\\\raé",
+    "expected": null
+  },
+  {
+    "input": "\"b_y\t $\"y$yb ' \t\\$'\"ab\" aby'$`",
+    "expected": null
+  },
+  {
+    "input": "_`b'\"#y'éb\"`_b'x\"'\nx#b\"#y''$",
+    "expected": null
+  },
+  {
+    "input": "\t_bééy\r\"\" \n` \"bb\"\r ",
+    "expected": [
+      "_bééy",
+      "",
+      "`",
+      "bb"
+    ]
+  },
+  {
+    "input": "\" `b",
+    "expected": null
+  },
+  {
+    "input": "\ty`'\t\n`\" a$\"",
+    "expected": null
+  },
+  {
+    "input": "x \t\t'\t\\''xa\ny$\n\\y $y \ra\\a\\y`$'",
+    "expected": [
+      "x",
+      "\t\\xa\ny$\n\\y $y \ra\\a\\y`$"
+    ]
+  },
+  {
+    "input": "`\"#a\"__$",
+    "expected": [
+      "`#a__$"
+    ]
+  },
+  {
+    "input": "\n\r\rbb`a#\n\ty_\n_ \" y''a__ ",
+    "expected": null
+  },
+  {
+    "input": "\r\n#\r_\r",
+    "expected": [
+      "#",
+      "_"
+    ]
+  },
+  {
+    "input": "y\ry",
+    "expected": [
+      "y",
+      "y"
+    ]
+  },
+  {
+    "input": "'xéx\"'bx\\b\\_\"é\r_'\n_#'\n\ra\t\t",
+    "expected": null
+  },
+  {
+    "input": "x#\r`\r\"ax'aa$é_a\ra#y'$\"_\t",
+    "expected": [
+      "x#",
+      "`",
+      "ax'aa$é_a\ra#y'$_"
+    ]
+  },
+  {
+    "input": "y\\a\\#\n\t",
+    "expected": [
+      "ya#"
+    ]
+  },
+  {
+    "input": "##$###éé# _\\\ra\\#\ty_a x'_ay ",
+    "expected": null
+  },
+  {
+    "input": "\n\"\t\nx$b\n #\tb\"\"y\" ",
+    "expected": [
+      "\t\nx$b\n #\tby"
+    ]
+  },
+  {
+    "input": "#\\'\t\"\n",
+    "expected": null
+  },
+  {
+    "input": "yéxx\\$$# \"`\"\t\" \\a#a'\t' b\t_b\\$ \nb",
+    "expected": null
+  },
+  {
+    "input": "_$\r é_\ry_x\" \rb\t_y_a_é",
+    "expected": null
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "\\",
+    "expected": null
+  },
+  {
+    "input": "\\\\é_\"_a_\ta\t\r$a\\y\t_x_ é\"b\n_\na`",
+    "expected": [
+      "\\é__a_\ta\t\r$a\\y\t_x_ éb",
+      "_",
+      "a`"
+    ]
+  },
+  {
+    "input": "y`_$\r\"_xyéb_\r`\"yax\n`\t`",
+    "expected": [
+      "y`_$",
+      "_xyéb_\r`yax",
+      "`",
+      "`"
+    ]
+  },
+  {
+    "input": "a$##'x#\"_a`y\n_\tba#\"",
+    "expected": null
+  },
+  {
+    "input": "\t\\_bb`bé\\\n`x$\n\t\\#",
+    "expected": [
+      "_bb`bé\n`x$",
+      "#"
+    ]
+  },
+  {
+    "input": "x#\t\n`xy \"yb'_b\"$$",
+    "expected": [
+      "x#",
+      "`xy",
+      "yb'_b$$"
+    ]
+  },
+  {
+    "input": "\né\"é\\ééb y `b\t\r#\ryx$\r x",
+    "expected": null
+  },
+  {
+    "input": "\r\"ayb$_\"\"\nb\\$y#\t\"y\ré#\r`\\\"y#\ry\\",
+    "expected": null
+  },
+  {
+    "input": "x$ay` \\\r$xbb$b_x\n_'_y",
+    "expected": null
+  },
+  {
+    "input": "#é$\n\r_\"$$`\n#\\#_$\n`",
+    "expected": null
+  },
+  {
+    "input": "\"$\nbxx$'a\"\t\\# \"#`\rb\né'a$éx$",
+    "expected": null
+  },
+  {
+    "input": "`_#\"_$\"xbé\r\"\r#\naéa\t\" b\\\" '_ \tbb_",
+    "expected": null
+  },
+  {
+    "input": "a`#xaxx`#\tééxb\"\"_''#$aa$\\\r_a `bb",
+    "expected": [
+      "a`#xaxx`#",
+      "ééxb_#$aa$\r_a",
+      "`bb"
+    ]
+  },
+  {
+    "input": "a\tb\"\r #\"\\ `b#é\"y`\n `xé",
+    "expected": null
+  },
+  {
+    "input": "'b\"\n\t''é$",
+    "expected": null
+  },
+  {
+    "input": "a\\\r\txy`é \\é \\'",
+    "expected": [
+      "a\r",
+      "xy`é",
+      "é",
+      "'"
+    ]
+  },
+  {
+    "input": "_\r`",
+    "expected": [
+      "_",
+      "`"
+    ]
+  },
+  {
+    "input": "\n\\y\t\r \"`aa\" \na\\x$",
+    "expected": [
+      "y",
+      "`aa",
+      "ax$"
+    ]
+  },
+  {
+    "input": "b\\ yb\t\t`éé'é\t_\té'$_\\x\\b'yxb\r''y#\r",
+    "expected": null
+  },
+  {
+    "input": "`xb$\t''\r_ \\\"b \n\"\nx\\\\\"`$\n\t ",
+    "expected": [
+      "`xb$",
+      "",
+      "_",
+      "\"b",
+      "\nx\\`$"
+    ]
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "$\r'\té\\\"é\"`x\r\rbbbé\t \n",
+    "expected": null
+  },
+  {
+    "input": "'é\né#é`x'\n_'`#'\ty\n`a",
+    "expected": [
+      "é\né#é`x",
+      "_`#",
+      "y",
+      "`a"
+    ]
+  },
+  {
+    "input": "\"'\"a`\ra \r\n\r\"aéyx'\n",
+    "expected": null
+  },
+  {
+    "input": "\n`\\b#éx\r\nba",
+    "expected": [
+      "`b#éx",
+      "ba"
+    ]
+  },
+  {
+    "input": "éé\"\t",
+    "expected": null
+  },
+  {
+    "input": "\\\t\"\\b`y`xb\r\\aba\n\ny\ryy#b' b\"yyy_\n",
+    "expected": [
+      "\t\\b`y`xb\r\\aba\n\ny\ryy#b' byyy_"
+    ]
+  },
+  {
+    "input": "`\t\"'éx\r $ $ xé#\n__x\\\\\téb#é\"\n\tb\\ \\\\",
+    "expected": [
+      "`",
+      "'éx\r $ $ xé#\n__x\\\téb#é",
+      "b \\"
+    ]
+  },
+  {
+    "input": "$éa#",
+    "expected": [
+      "$éa#"
+    ]
+  },
+  {
+    "input": "`_\n\"\\`\" \t'x\n$\\  \t$\\y\"xx\"\"\"y_xb'",
+    "expected": [
+      "`_",
+      "\\`",
+      "x\n$\\  \t$\\y\"xx\"\"\"y_xb"
+    ]
+  },
+  {
+    "input": "\na\r",
+    "expected": [
+      "a"
+    ]
+  },
+  {
+    "input": "b$éyxb\n #éb$'\\b_\n\" y\\$",
+    "expected": null
+  },
+  {
+    "input": "\\'a\"\n\t\rb\néx$a$\r\\ é\"\\'\r é\"$a#a`y\t x",
+    "expected": null
+  },
+  {
+    "input": "_'é'\r$'#\t'\n_`$#\\\r'$aaé`\n",
+    "expected": null
+  },
+  {
+    "input": "aa'$`b\nb\t'bb''a_é\rx`$a\ra",
+    "expected": [
+      "aa$`b\nb\tbba_é",
+      "x`$a",
+      "a"
+    ]
+  },
+  {
+    "input": "\tx`\\\"#\\\"\\é\tb\n\t#b_'\r#`#$a_$\"x\n\t\r\\_",
+    "expected": null
+  },
+  {
+    "input": "'$\n\\#$_ #ééy_\" \\",
+    "expected": null
+  },
+  {
+    "input": "`x",
+    "expected": [
+      "`x"
+    ]
+  },
+  {
+    "input": "b'\\ _éa\"\r\téa$_`\r \"\né`\\\n'yaé\n`é",
+    "expected": [
+      "b\\ _éa\"\r\téa$_`\r \"\né`\\\nyaé",
+      "`é"
+    ]
+  },
+  {
+    "input": "#$$yxx\"\n#\t\\\rb#",
+    "expected": null
+  },
+  {
+    "input": "_'b$\\y`\n'\n\r#xé\t_#\t\\#bé''\t$a\t#",
+    "expected": [
+      "_b$\\y`\n",
+      "#xé",
+      "_#",
+      "#bé",
+      "$a",
+      "#"
+    ]
+  },
+  {
+    "input": "#\n \\x$b b aé\\$a''\r _\taa_\t'`'\rba",
+    "expected": [
+      "#",
+      "x$b",
+      "b",
+      "aé$a",
+      "_",
+      "aa_",
+      "`",
+      "ba"
+    ]
+  },
+  {
+    "input": "y\\\r\t\téy$",
+    "expected": [
+      "y\r",
+      "éy$"
+    ]
+  },
+  {
+    "input": "`\t'# `_aa#' x`",
+    "expected": [
+      "`",
+      "# `_aa#",
+      "x`"
+    ]
+  },
+  {
+    "input": "'\nba'\nb`b\tx $a$b_y`\nb\t\r`x''y\r#",
+    "expected": [
+      "\nba",
+      "b`b",
+      "x",
+      "$a$b_y`",
+      "b",
+      "`xy",
+      "#"
+    ]
+  },
+  {
+    "input": " \"\t\r'$éyb\t#'bx\"",
+    "expected": [
+      "\t\r'$éyb\t#'bx"
+    ]
+  },
+  {
+    "input": "$y\t$\ny\\a\t`b\r# \né`by\ra' #y`éx$\r_\r",
+    "expected": null
+  },
+  {
+    "input": "y\n\nb\ta\ra'\\é_\\",
+    "expected": null
+  },
+  {
+    "input": "$é`é \\$y$#",
+    "expected": [
+      "$é`é",
+      "$y$#"
+    ]
+  },
+  {
+    "input": "`'a\n\" \na#`a\n\\\r\\é$`'#b\na\t\r$#\r",
+    "expected": [
+      "`a\n\" \na#`a\n\\\r\\é$`#b",
+      "a",
+      "$#"
+    ]
+  },
+  {
+    "input": " \nx'_\r\nxay`y\t\r'\t\"y\nééx\\\\b yxax\n\\",
+    "expected": null
+  },
+  {
+    "input": "\\' _é\n#$\r$ y$\n\n \n__ \\'x\n",
+    "expected": [
+      "'",
+      "_é",
+      "#$",
+      "$",
+      "y$",
+      "__",
+      "'x"
+    ]
+  },
+  {
+    "input": "a$\t`\\ayé\rba\t",
+    "expected": [
+      "a$",
+      "`ayé",
+      "ba"
+    ]
+  },
+  {
+    "input": "y\t $`ba\"aéb$\n#$\n#'\"é`b\t'a\\",
+    "expected": null
+  },
+  {
+    "input": " \n# '\t#é`\\ab",
+    "expected": null
+  },
+  {
+    "input": "\\x_\r\t`\nb'",
+    "expected": null
+  },
+  {
+    "input": "é_é`'\\\"x",
+    "expected": null
+  },
+  {
+    "input": "\r_é\rx#b # $b_yya`##a\\\r`\t''yx \\ ",
+    "expected": [
+      "_é",
+      "x#b",
+      "#",
+      "$b_yya`##a\r`",
+      "yx",
+      " "
+    ]
+  },
+  {
+    "input": "#_$é\\`ébé#\r\r\\$\"\t$é",
+    "expected": null
+  },
+  {
+    "input": "_a\ty _ '\r$`\r",
+    "expected": null
+  },
+  {
+    "input": "\tyay`é\"ya\néyb$é \n",
+    "expected": null
+  },
+  {
+    "input": "'  $a'\r$$xb",
+    "expected": [
+      "  $a",
+      "$$xb"
+    ]
+  },
+  {
+    "input": " \"'a'a\r\"$\t \r##\"'_\r''é\t\"\t\"\txyyx\"y",
+    "expected": [
+      "'a'a\r$",
+      "##'_\r''é\t",
+      "\txyyxy"
+    ]
+  },
+  {
+    "input": "`'`#ééxx\\x#\r\r\ta é\tx`x\tb$\n##y`\\",
+    "expected": null
+  },
+  {
+    "input": "`x\r$\tayby\n#\n\r\tabx\"\\$yb\t'\r\" \n\r \n",
+    "expected": [
+      "`x",
+      "$",
+      "ayby",
+      "#",
+      "abx\\$yb\t'\r"
+    ]
+  },
+  {
+    "input": "_by $ax_\\\t\t$` \\\\ _#$é\\\n\r$\rx\n\"$a\"a",
+    "expected": [
+      "_by",
+      "$ax_\t",
+      "$`",
+      "\\",
+      "_#$é\n",
+      "$",
+      "x",
+      "$aa"
+    ]
+  },
+  {
+    "input": "#x#'__bé\"é\\é#aé\r\t_` ",
+    "expected": null
+  },
+  {
+    "input": "bébé_\t\t\t\"$_\t\"x$_",
+    "expected": [
+      "bébé_",
+      "$_\tx$_"
+    ]
+  },
+  {
+    "input": "\"\\yéab\t'éx' _''_#'\"\r\\ a\"#é\r",
+    "expected": null
+  },
+  {
+    "input": "\r\r'\n",
+    "expected": null
+  },
+  {
+    "input": "\n' $a\"b$\"b#y\"",
+    "expected": null
+  },
+  {
+    "input": "$\"a`ab'\t\\ #'  $`a_y\"\\_\r",
+    "expected": [
+      "$a`ab'\t\\ #'  $`a_y_"
+    ]
+  },
+  {
+    "input": "#ya\\$ x\"'\ty$#\nx_\r\r\na`x\tyyx",
+    "expected": null
+  },
+  {
+    "input": "x'`\r\n\\\\\\\\\r_x$`#",
+    "expected": null
+  },
+  {
+    "input": "byx`yé \"'\"bé`éay$`a#a\"\rbéé",
+    "expected": null
+  },
+  {
+    "input": "y_xé`\n\té'\rx\n\ré`ax\"\n  y\\$b\n\r\n'é$\t",
+    "expected": [
+      "y_xé`",
+      "é\rx\n\ré`ax\"\n  y\\$b\n\r\né$"
+    ]
+  },
+  {
+    "input": "\ta\r",
+    "expected": [
+      "a"
+    ]
+  },
+  {
+    "input": "_$ba\r\tbéb\n`x\n\"y",
+    "expected": null
+  },
+  {
+    "input": "'é\t$y\"\nyyaé\t\n\"\\x_\"",
+    "expected": null
+  },
+  {
+    "input": "\n''_\t'é\r'\"b##\t#éaax$\n\\$ a__b_$\"",
+    "expected": [
+      "_",
+      "é\rb##\t#éaax$\n\\$ a__b_$"
+    ]
+  },
+  {
+    "input": "b\"\r",
+    "expected": null
+  },
+  {
+    "input": "b\na_\r'a#$\"$\\#b# b'#'",
+    "expected": null
+  },
+  {
+    "input": "\na\r$\\\\##$$\\y'\"\\$y\tby\n",
+    "expected": null
+  },
+  {
+    "input": "a\n\nyyaé\r\"\"\"\t`$\\a",
+    "expected": null
+  },
+  {
+    "input": "\ré_\ty`x`_\n\n`\"\r`\r'\\ \r'",
+    "expected": null
+  },
+  {
+    "input": "\n'\t$éb ",
+    "expected": null
+  },
+  {
+    "input": "bay \t\\\t b\t_'  \ra$\rb\"b\n'#$\\",
+    "expected": null
+  },
+  {
+    "input": "`_\n`",
+    "expected": [
+      "`_",
+      "`"
+    ]
+  },
+  {
+    "input": "ayééx$yax \"é",
+    "expected": null
+  },
+  {
+    "input": " \n",
+    "expected": []
+  },
+  {
+    "input": "b'$\n\"\t_\n\"_\n\\y'b'\tyx",
+    "expected": null
+  },
+  {
+    "input": "byb\t\n#x\ny",
+    "expected": [
+      "byb",
+      "#x",
+      "y"
+    ]
+  },
+  {
+    "input": "yb_#\n",
+    "expected": [
+      "yb_#"
+    ]
+  },
+  {
+    "input": "x\t''é \"b$$ya  #",
+    "expected": null
+  },
+  {
+    "input": "y\r",
+    "expected": [
+      "y"
+    ]
+  },
+  {
+    "input": "é$`ay b\tb",
+    "expected": [
+      "é$`ay",
+      "b",
+      "b"
+    ]
+  },
+  {
+    "input": "_\\",
+    "expected": null
+  },
+  {
+    "input": "##\r`\n\r\t\t`_'\"",
+    "expected": null
+  },
+  {
+    "input": "b\"\"",
+    "expected": [
+      "b"
+    ]
+  },
+  {
+    "input": "$\"_é",
+    "expected": null
+  },
+  {
+    "input": "$\"#\rb\\éb",
+    "expected": null
+  },
+  {
+    "input": "\"a\"`",
+    "expected": [
+      "a`"
+    ]
+  },
+  {
+    "input": "é_x\r$\n#y$\t\\''$$ \\\\$ $\tébb \"",
+    "expected": null
+  },
+  {
+    "input": " ",
+    "expected": []
+  },
+  {
+    "input": "`\ta#'_\t yb_\ny ",
+    "expected": null
+  },
+  {
+    "input": "`$\né#éy#b #aya\ny\ra\na`$\ré#`\\__b\r#x`",
+    "expected": [
+      "`$",
+      "é#éy#b",
+      "#aya",
+      "y",
+      "a",
+      "a`$",
+      "é#`__b",
+      "#x`"
+    ]
+  },
+  {
+    "input": "#\"_x$#'ax_é`b\"'_#\r\"#\"y",
+    "expected": null
+  },
+  {
+    "input": "'bb \t\tbaa_#a",
+    "expected": null
+  },
+  {
+    "input": "_xé \t`y\t\r_ \ry``' yy#\t\\\"\\\r `\"'\"a\ra\t",
+    "expected": null
+  },
+  {
+    "input": "$\réb`y'b\t\"\ry\t\r\n$é`# é\t$_xé\n`a\n#_\t",
+    "expected": null
+  },
+  {
+    "input": "\\y$a #a\néy\ra é\raby éa\n\na\\x$x_ b",
+    "expected": [
+      "y$a",
+      "#a",
+      "éy",
+      "a",
+      "é",
+      "aby",
+      "éa",
+      "ax$x_",
+      "b"
+    ]
+  },
+  {
+    "input": "\\\\é'\r\tb_",
+    "expected": null
+  },
+  {
+    "input": "y#\ty `\"é_ __\"",
+    "expected": [
+      "y#",
+      "y",
+      "`é_ __"
+    ]
+  },
+  {
+    "input": "`y `\"x\\a\"#\\\t''_ bxé\\ \\",
+    "expected": null
+  },
+  {
+    "input": "''é\\$\n \n \ré'\\x$yé\t\"xéy'``$",
+    "expected": [
+      "é$",
+      "é\\x$yé\t\"xéy``$"
+    ]
+  },
+  {
+    "input": "\ny",
+    "expected": [
+      "y"
+    ]
+  },
+  {
+    "input": "y'$ yxb_#\\$\rb\t$__\\xy\r\"_'y' # b",
+    "expected": null
+  },
+  {
+    "input": " _\r`\na#\"\n` \té\\'",
+    "expected": null
+  },
+  {
+    "input": "x",
+    "expected": [
+      "x"
+    ]
+  },
+  {
+    "input": "éy_x\"#\\",
+    "expected": null
+  },
+  {
+    "input": "x\\ay",
+    "expected": [
+      "xay"
+    ]
+  },
+  {
+    "input": "\r\ty \r\txa\nb '_\"_'a \rx\\y$\r",
+    "expected": [
+      "y",
+      "xa",
+      "b",
+      "_\"_a",
+      "xy$"
+    ]
+  },
+  {
+    "input": "\\a`''\"_\r`\\a\t\"bx\n'\\_$x\\$\t\n\"\ty\"",
+    "expected": null
+  },
+  {
+    "input": "#aé\n``\t'_y$\n'\t`éb$ xé\ré\\\r\rb _y#x\\'",
+    "expected": [
+      "#aé",
+      "``",
+      "_y$\n",
+      "`éb$",
+      "xé",
+      "é\r",
+      "b",
+      "_y#x'"
+    ]
+  },
+  {
+    "input": "'bb\\\ta'y\rx\ny_y\rx '$\t$_\t_\na`$\n x\"`",
+    "expected": null
+  },
+  {
+    "input": "b x y$ \" '",
+    "expected": null
+  },
+  {
+    "input": "`é`a$a$\r_xé$'\n'_",
+    "expected": [
+      "`é`a$a$",
+      "_xé$\n_"
+    ]
+  },
+  {
+    "input": "\\#\t`$b\t\r\\#",
+    "expected": [
+      "#",
+      "`$b",
+      "#"
+    ]
+  },
+  {
+    "input": " \\\n\\_`''\\ba_\\",
+    "expected": null
+  },
+  {
+    "input": "é\n\n\t#é`\r_xa`é`\rx\\",
+    "expected": null
+  },
+  {
+    "input": "_a\\\t`y\n \t\"_`aay\t#\t`_`\"#éby\\\r`# #",
+    "expected": [
+      "_a\t`y",
+      "_`aay\t#\t`_`#éby\r`#",
+      "#"
+    ]
+  },
+  {
+    "input": " \n\r_\t\"`b\"''\t\\a'éy\n",
+    "expected": null
+  },
+  {
+    "input": "\n\\x$$\"xy\r\t\t\t_é\r\n`\\",
+    "expected": null
+  },
+  {
+    "input": "xxy\"' é#y\r\n \ty\r\tx'_ybb\n\"\n#",
+    "expected": [
+      "xxy' é#y\r\n \ty\r\tx'_ybb\n",
+      "#"
+    ]
+  },
+  {
+    "input": "a\na",
+    "expected": [
+      "a",
+      "a"
+    ]
+  },
+  {
+    "input": "\r \rb_y'\\\t\r\"'\\\r#\ra$\n\n\ty \n\\\" a\r_ 'x",
+    "expected": null
+  },
+  {
+    "input": "\rxb\taa \\$ _\"x#a$\tyx_\\x`\\x \n\"\\éééé",
+    "expected": [
+      "xb",
+      "aa",
+      "$",
+      "_x#a$\tyx_\\x`\\x \néééé"
+    ]
+  },
+  {
+    "input": "\\xbé_\t\t\t\\\n#\"`'\n __\n$\rb\r \\\r`y_",
+    "expected": null
+  },
+  {
+    "input": " $x#",
+    "expected": [
+      "$x#"
+    ]
+  },
+  {
+    "input": "`\r#",
+    "expected": [
+      "`",
+      "#"
+    ]
+  },
+  {
+    "input": "`'\\x \ny'`\r'_aé#ayb\\\"é\ta$a #\r'#",
+    "expected": [
+      "`\\x \ny`",
+      "_aé#ayb\\\"é\ta$a #\r#"
+    ]
+  },
+  {
+    "input": "\"y",
+    "expected": null
+  },
+  {
+    "input": "é $#xé \réx\n\\y$",
+    "expected": [
+      "é",
+      "$#xé",
+      "éx",
+      "y$"
+    ]
+  },
+  {
+    "input": "'\r_yéé\"\tbb \"`$`é`\r#_\t`\t \r",
+    "expected": null
+  },
+  {
+    "input": "`\rb'#'\n'\r`$éb\ta#\"a\r$éa yéb_ __$y`_",
+    "expected": null
+  },
+  {
+    "input": "\" #\rb$\\b'yx ``a\"a$'yéa\t\tx\r\\",
+    "expected": null
+  },
+  {
+    "input": "x$'x$a\"",
+    "expected": null
+  },
+  {
+    "input": "\t\"é$$\"\rxx`aé\t\t 'y\\ ab#\r\r_aé'\"",
+    "expected": null
+  },
+  {
+    "input": "\"\\ba\\`\\\\$\t#yb$\\\"é'é_b _'\\_",
+    "expected": null
+  },
+  {
+    "input": "x\n\\_\r",
+    "expected": [
+      "x",
+      "_"
+    ]
+  },
+  {
+    "input": " y_\t\ta'\néé'#_a\n`éx`b_",
+    "expected": [
+      "y_",
+      "a\néé#_a",
+      "`éx`b_"
+    ]
+  },
+  {
+    "input": "\rbx`\rébé$a\"a`\nyéx_\\'#\r'",
+    "expected": null
+  },
+  {
+    "input": "x#x\r\tyb`'`$",
+    "expected": null
+  },
+  {
+    "input": "a#\\#\\$",
+    "expected": [
+      "a##$"
+    ]
+  },
+  {
+    "input": "$xb`x _\\b#aéb`b# \tba y#_\\\\x' ",
+    "expected": null
+  },
+  {
+    "input": "'#y\rba \\yyy",
+    "expected": null
+  },
+  {
+    "input": "yya_b \r$",
+    "expected": [
+      "yya_b",
+      "$"
+    ]
+  },
+  {
+    "input": "$\\b_$\n\nb\r\\##éax\"ax$`\ny \tb __",
+    "expected": null
+  },
+  {
+    "input": "x#\r##b''x\\\"y\r'y\té '\\x\t\n'y",
+    "expected": null
+  },
+  {
+    "input": "\tbaa\r\r\t`\téy\n'\n`y\"x``#'",
+    "expected": [
+      "baa",
+      "`",
+      "éy",
+      "\n`y\"x``#"
+    ]
+  },
+  {
+    "input": "a`aé\nb\"$ x\r",
+    "expected": null
+  },
+  {
+    "input": "''y",
+    "expected": [
+      "y"
+    ]
+  },
+  {
+    "input": "#'\t\\\\\" ",
+    "expected": null
+  },
+  {
+    "input": "b yé'_\ryx_\rb\r \"$`#\na \\\"$\" $",
+    "expected": null
+  },
+  {
+    "input": "\"b$",
+    "expected": null
+  },
+  {
+    "input": "`\"`y\r\ry y\"_b",
+    "expected": [
+      "``y\r\ry y_b"
+    ]
+  },
+  {
+    "input": "`a_\"  \t$\r\\$a'y'\t",
+    "expected": null
+  },
+  {
+    "input": "`\n\r x#\tb#x#aa_\nb\n",
+    "expected": [
+      "`",
+      "x#",
+      "b#x#aa_",
+      "b"
+    ]
+  },
+  {
+    "input": "\r\ry\"y__xa ",
+    "expected": null
+  },
+  {
+    "input": "##a\\\rx $é`\tyéby_éb\n",
+    "expected": [
+      "##a\rx",
+      "$é`",
+      "yéby_éb"
+    ]
+  },
+  {
+    "input": " '\ty\t''\nxa'$\"b\\'a\\ayby#_a_",
+    "expected": null
+  },
+  {
+    "input": " b#\\'",
+    "expected": [
+      "b#'"
+    ]
+  },
+  {
+    "input": "\r`xy _",
+    "expected": [
+      "`xy",
+      "_"
+    ]
+  },
+  {
+    "input": "é$_y#\r\nx\\$ayx`a`#\"\nyyyyé_\t",
+    "expected": null
+  },
+  {
+    "input": "#\r`",
+    "expected": [
+      "#",
+      "`"
+    ]
+  },
+  {
+    "input": "$\ty'ayx_\"y__ \né\r\ry\t\"$\t\n\"",
+    "expected": null
+  },
+  {
+    "input": "b\\\ny\nyx_é\nb\"_\\\r# \t$\nx",
+    "expected": null
+  },
+  {
+    "input": "_\\`x #x_\nb\"x'\\\"y\réy$_é",
+    "expected": null
+  },
+  {
+    "input": "` é$_é'\\\"_`#\\_$b\"\\é\t \t\ty\"\txy\"b#",
+    "expected": null
+  },
+  {
+    "input": "_x`b`'##",
+    "expected": null
+  },
+  {
+    "input": "'$\n\n$_$` \\\tx_#'x\\\\'\\é#ay`",
+    "expected": null
+  },
+  {
+    "input": "\"y\néy\r\ty\n\ty$\n\"yy\ré\\`'\\",
+    "expected": null
+  },
+  {
+    "input": "é 'a\" #\\#\tbx' ' bx\"\t`b yaé\n$b#",
+    "expected": null
+  },
+  {
+    "input": "$y\"#\\\"x b\n\"\t#'\ry\tx\ry\" #'\réyy'\"",
+    "expected": null
+  },
+  {
+    "input": "\t\\ #a\r'\\$\" 'yx_\n\r\\ b \t#\n\\\"\"\ty#\rx#",
+    "expected": null
+  },
+  {
+    "input": "éx`$\\x\n\ny\\éb\r#\\",
+    "expected": null
+  },
+  {
+    "input": "`'\t y\r\r'éb''xa\\\"a_\"'_y",
+    "expected": null
+  },
+  {
+    "input": "x'`\t'b\tx\"\"ay\"#\r\raéy\té\" $\\b",
+    "expected": [
+      "x`\tb",
+      "xay#\r\raéy\té",
+      "$b"
+    ]
+  },
+  {
+    "input": "\"\t\ta```x",
+    "expected": null
+  },
+  {
+    "input": "#`\\\" y`\n\t\n_\tx\ta\r\\#_b'_",
+    "expected": null
+  },
+  {
+    "input": "_\"'_a\tx$\na' y\n  # `b\t\\\né#x#éb\\'é'",
+    "expected": null
+  },
+  {
+    "input": "$\t\n\\\n \ry_\\\r#_x$yb$\\$xxéy_$xé$xb",
+    "expected": [
+      "$",
+      "\n",
+      "y_\r#_x$yb$$xxéy_$xé$xb"
+    ]
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "_#\r\"_ abb#éxx'y_$#$\rb \"# #$x$x",
+    "expected": [
+      "_#",
+      "_ abb#éxx'y_$#$\rb #",
+      "#$x$x"
+    ]
+  },
+  {
+    "input": "_'#\n_\n\"\\'\"#a#$#ay'",
+    "expected": null
+  },
+  {
+    "input": "\"\n\n_ é`\\'a$é\nx$\\\nxy'$'\n'\r\"\\",
+    "expected": null
+  },
+  {
+    "input": "\n\\\"'# _\r$aé ab \rxa\\`__é$",
+    "expected": null
+  },
+  {
+    "input": "\rxx\\a\t_#_ya \ra\"yé $\n\"é\nby",
+    "expected": [
+      "xxa",
+      "_#_ya",
+      "ayé $\né",
+      "by"
+    ]
+  },
+  {
+    "input": "$\n\"`é`\t#",
+    "expected": null
+  },
+  {
+    "input": "\r\\\\x''\rx\\\r bax\r\naa\ty$y_#",
+    "expected": [
+      "\\x",
+      "x\r",
+      "bax",
+      "aa",
+      "y$y_#"
+    ]
+  },
+  {
+    "input": " #é_y_\nbyy",
+    "expected": [
+      "#é_y_",
+      "byy"
+    ]
+  },
+  {
+    "input": "ééb`\t\t\\y`$\ryy\\##y",
+    "expected": [
+      "ééb`",
+      "y`$",
+      "yy##y"
+    ]
+  },
+  {
+    "input": "\r\n\t\"_\r\t\t\\a",
+    "expected": null
+  },
+  {
+    "input": "é'`#$#b'\ra\" #$y #\rb'y\té\t_yby",
+    "expected": null
+  },
+  {
+    "input": "'x#x\"b\"$\néxb\\é`\n\r\r#x'$#",
+    "expected": [
+      "x#x\"b\"$\néxb\\é`\n\r\r#x$#"
+    ]
+  },
+  {
+    "input": "\rb\t_$'\r\r\nb\nx'#\t\\$\rb'#'#\\\t#\\bb",
+    "expected": [
+      "b",
+      "_$\r\r\nb\nx#",
+      "$",
+      "b##\t#bb"
+    ]
+  },
+  {
+    "input": "\\\t\\ 'a '\"ax\"$$\r\"y$a\t`b\r\\é",
+    "expected": null
+  },
+  {
+    "input": "é\t\r\"xb`\"\r'$ b$`\" b\t\\\"$yéb_#\r $",
+    "expected": null
+  },
+  {
+    "input": "$\t` $`_\t_é# ``\n\nb '",
+    "expected": null
+  },
+  {
+    "input": "\\\\'#a\"\"x\t\\#`é#`é$_ #\\$",
+    "expected": null
+  },
+  {
+    "input": "a` \n`\nx\"\t\nb\na`\tyy'é#\r'_\nax#y#_\\`\ta",
+    "expected": null
+  },
+  {
+    "input": "_#\r\"\ty'`$b#$'b\ny\"yyx\"bx\r#\r\t`\n#\nb_'",
+    "expected": null
+  },
+  {
+    "input": " axé\t\r\rax\r\nx`é\"\"b_\"'$$$ _",
+    "expected": null
+  },
+  {
+    "input": "\nx\\",
+    "expected": null
+  },
+  {
+    "input": "'##\"y'aa'a",
+    "expected": null
+  },
+  {
+    "input": "\t_y'$\t \t_bx",
+    "expected": null
+  },
+  {
+    "input": "' 'x`y\\ y'_b\"\t_é`byé\"b\tab\\",
+    "expected": null
+  },
+  {
+    "input": "\r#\\\t\"\\#y $\r\"a\r$\r_\\$y'y\"é",
+    "expected": null
+  },
+  {
+    "input": "\"\t\"$a$$\"\txa`\r\t 'y'",
+    "expected": null
+  },
+  {
+    "input": "\\\nb\"\n$$y a$\"\ta\"#\n_\rx'\\ x\"éx\n",
+    "expected": [
+      "\nb\n$$y a$",
+      "a#\n_\rx'\\ xéx"
+    ]
+  },
+  {
+    "input": "y\n\\\t$b aé\txé$yy_ y``\tax_",
+    "expected": [
+      "y",
+      "\t$b",
+      "aé",
+      "xé$yy_",
+      "y``",
+      "ax_"
+    ]
+  },
+  {
+    "input": "y\ny$#\"'y `a$_`  ybb`y$ ##x#'bxbx\"",
+    "expected": [
+      "y",
+      "y$#'y `a$_`  ybb`y$ ##x#'bxbx"
+    ]
+  },
+  {
+    "input": "\n\t_\tb\"x\ta`\r`'b\r\n\n\r\\\n'b\\`#\r",
+    "expected": null
+  },
+  {
+    "input": "''`\r\nx _$\"x\"_é\r",
+    "expected": [
+      "`",
+      "x",
+      "_$x_é"
+    ]
+  },
+  {
+    "input": "\t_\" `x\r#yy$ay\ty\t\\\rab\n_\t\\yy \\é",
+    "expected": null
+  },
+  {
+    "input": "\"_\"'\"\t\"$\\`'_#ébé'\ta'xb",
+    "expected": [
+      "_\"\t\"$\\`_#ébé\taxb"
+    ]
+  },
+  {
+    "input": "\"a\t\ra\"`\t \tb\r`'\\éb\r\nx\tb\t#b'a\"\nb\t_ ",
+    "expected": null
+  },
+  {
+    "input": " ax\r\tébx\\$`a\t\r_\"$\t'\"é_\"a\n",
+    "expected": null
+  },
+  {
+    "input": "\"`_'$éxy\r`",
+    "expected": null
+  },
+  {
+    "input": "",
+    "expected": []
+  },
+  {
+    "input": "\n#\t\n b\r\"xx xxx`\r\"\n\\\t#\r\r _x\t \nb_b",
+    "expected": [
+      "#",
+      "b",
+      "xx xxx`\r",
+      "\t#",
+      "_x",
+      "b_b"
+    ]
+  },
+  {
+    "input": "$'\t'\r`a'a$\"x\n\n\ra\rééyay",
+    "expected": null
+  },
+  {
+    "input": "\ny_'y$\tx\t'yy\t'yé'$#yb",
+    "expected": [
+      "y_y$\tx\tyy",
+      "yé$#yb"
+    ]
+  },
+  {
+    "input": "\r_$#b\"\n #\n\ty\t\"y'",
+    "expected": null
+  },
+  {
+    "input": "é_#\\\\\t",
+    "expected": [
+      "é_#\\"
+    ]
+  },
+  {
+    "input": "by\"_\ny$ $#$ y",
+    "expected": null
+  },
+  {
+    "input": "`\\''#`\t\n\naéb é##` \t`\\bé$$",
+    "expected": null
+  },
+  {
+    "input": "y$é\r\\y'_é_y'\\$yé\n\\'",
+    "expected": [
+      "y$é",
+      "y_é_y$yé",
+      "'"
+    ]
+  },
+  {
+    "input": "xaa$\\ ax\ty",
+    "expected": [
+      "xaa$ ax",
+      "y"
+    ]
+  },
+  {
+    "input": "#'\r\ny'aa#x`\r\\é#é_$$#é",
+    "expected": [
+      "#\r\nyaa#x`",
+      "é#é_$$#é"
+    ]
+  },
+  {
+    "input": "é#\r$ \r$\r\\\n",
+    "expected": [
+      "é#",
+      "$",
+      "$",
+      "\n"
+    ]
+  },
+  {
+    "input": "x'\" b\t'\n\nb_y`xé\ny\n#b`é#\r#xa$y$'a_",
+    "expected": null
+  },
+  {
+    "input": "  x\ré$\té\n\tb\\'\t\\y$\"y\t\\`` béy\na",
+    "expected": null
+  },
+  {
+    "input": "\r' _ \\\r\\a\\éa``\\y`\n\n\t #'$_\"x\tb y",
+    "expected": null
+  },
+  {
+    "input": "ba_`\"bx\\#_\"",
+    "expected": [
+      "ba_`bx\\#_"
+    ]
+  },
+  {
+    "input": "by\\xb`ya\"\t#$\rbé`\n_\n\ré",
+    "expected": null
+  },
+  {
+    "input": "$ x\"#\t#\r",
+    "expected": null
+  },
+  {
+    "input": "'_\rb\né\\\t\t`xaé\nb\r$\n_\nba y'\té'",
+    "expected": null
+  },
+  {
+    "input": "\\$\rxyé_a'\\y 'yb _y$é _$\\ybb",
+    "expected": [
+      "$",
+      "xyé_a\\y yb",
+      "_y$é",
+      "_$ybb"
+    ]
+  },
+  {
+    "input": "'y#\\ba\\\t`a\\yy",
+    "expected": null
+  },
+  {
+    "input": "aéyx\\b#y\n#\tx\"\r\naéé'x",
+    "expected": null
+  },
+  {
+    "input": "#\r\"é' _x$y\n\t'é _\n\r\t",
+    "expected": null
+  },
+  {
+    "input": "xxy\"\t`\\\\yx`\"`ba``y'by$'",
+    "expected": [
+      "xxy\t`\\yx``ba``yby$"
+    ]
+  },
+  {
+    "input": "'éxyé_`aa$\"é\r\ryb\\$\"#_\t_b",
+    "expected": null
+  },
+  {
+    "input": "\t#\"`b",
+    "expected": null
+  },
+  {
+    "input": "b\"$bé$",
+    "expected": null
+  },
+  {
+    "input": "\\_#yx`",
+    "expected": [
+      "_#yx`"
+    ]
+  },
+  {
+    "input": "_\r _é#\ty\t\r`\"'",
+    "expected": null
+  },
+  {
+    "input": "b'y$$'\n_ ",
+    "expected": [
+      "by$$",
+      "_"
+    ]
+  },
+  {
+    "input": "_é\"\\\t\r'\"`\"éé$$$\\\"#\tb_\r_x`#bx#x",
+    "expected": null
+  },
+  {
+    "input": "\t_ `b\t",
+    "expected": [
+      "_",
+      "`b"
+    ]
+  },
+  {
+    "input": "ya\té'é_$\\x\né#é`",
+    "expected": null
+  },
+  {
+    "input": "$\"`x\\\n$\n \\`yxb\t\\a\nbbaé\nxé",
+    "expected": null
+  },
+  {
+    "input": "x\ty\" $'bx ",
+    "expected": null
+  },
+  {
+    "input": "$$a_$\r",
+    "expected": [
+      "$$a_$"
+    ]
+  },
+  {
+    "input": " \r\r$'x'$",
+    "expected": [
+      "$x$"
+    ]
+  },
+  {
+    "input": "\r\r'x #'\" aaa\r",
+    "expected": null
+  },
+  {
+    "input": "é\r` bb\r`",
+    "expected": [
+      "é",
+      "`",
+      "bb",
+      "`"
+    ]
+  },
+  {
+    "input": "_y$ \rb bé_\tb#\n'$\t\\#xb\\'\t a'$\"\"$éa",
+    "expected": null
+  },
+  {
+    "input": "\"` _#ya'é\r\t``'ayb\ry\n\\\"`é$\r` y#é_",
+    "expected": null
+  },
+  {
+    "input": "x\\$ybb'\\$a\t\r\r\r\r",
+    "expected": null
+  },
+  {
+    "input": "é\"#'b_'aaéy\n",
+    "expected": null
+  },
+  {
+    "input": "\\\\\n\"#\rxx\t_$a\ny",
+    "expected": null
+  },
+  {
+    "input": "\t#`\n\n",
+    "expected": [
+      "#`"
+    ]
+  },
+  {
+    "input": "\\\té# \"b $",
+    "expected": null
+  },
+  {
+    "input": "\r$\r'`#\r$\t\t\\#\t bx\r\té \"'a#y",
+    "expected": [
+      "$",
+      "`#\r$\t\t\\#\t bx\r\té \"a#y"
+    ]
+  },
+  {
+    "input": "éx`\ta# x'#",
+    "expected": null
+  },
+  {
+    "input": "ba$\r\\éx_x `\"''\n\né$_y`\"",
+    "expected": [
+      "ba$",
+      "éx_x",
+      "`''\n\né$_y`"
+    ]
+  },
+  {
+    "input": "xay\n`_ay'é$ax$\r\\ '\"",
+    "expected": null
+  },
+  {
+    "input": "xy_`xaya'\n\n\t",
+    "expected": null
+  },
+  {
+    "input": "\réaé\"\n\n ",
+    "expected": null
+  },
+  {
+    "input": "éé",
+    "expected": [
+      "éé"
+    ]
+  },
+  {
+    "input": "x\\x",
+    "expected": [
+      "xx"
+    ]
+  },
+  {
+    "input": "yx_\t bxa\rx\"_`é'a\tybx\" _`$aééx",
+    "expected": [
+      "yx_",
+      "bxa",
+      "x_`é'a\tybx",
+      "_`$aééx"
+    ]
+  },
+  {
+    "input": "é \t_a#\t\"",
+    "expected": null
+  },
+  {
+    "input": "\r`yaa'xa",
+    "expected": null
+  },
+  {
+    "input": "\t",
+    "expected": []
+  },
+  {
+    "input": "\"\"_\\\"\"\ré\n#'$\\\ta",
+    "expected": null
+  },
+  {
+    "input": "\r#'\\'\"éy \tya''",
+    "expected": null
+  },
+  {
+    "input": "b\"é\\\"y\n_a",
+    "expected": null
+  },
+  {
+    "input": "#\"\t\t'xxy\\ya'\\\nb  $#$\"xxa",
+    "expected": [
+      "#\t\t'xxy\\ya'\\\nb  $#$xxa"
+    ]
+  },
+  {
+    "input": "`$$`ab\"é\t\t_\"$\t\\ $",
+    "expected": [
+      "`$$`abé\t\t_$",
+      " $"
+    ]
+  },
+  {
+    "input": "ay\ré\té# $_\"a`\r",
+    "expected": null
+  },
+  {
+    "input": "x$#x_ `x`xy \n\r'\"x\\\\`a",
+    "expected": null
+  },
+  {
+    "input": "a\n#'`\né \r",
+    "expected": null
+  },
+  {
+    "input": "\tba##\"\r\n",
+    "expected": null
+  },
+  {
+    "input": "\néb`'yé#`y#",
+    "expected": null
+  },
+  {
+    "input": "\\$\r`a` xa$_b$'\"b \\_\"`xaxé\"é` \na\t",
+    "expected": null
+  },
+  {
+    "input": "\"\téy'```_x$",
+    "expected": null
+  },
+  {
+    "input": "\\\n\"\tyyx\\b_\nb\\\n\"'_\"x'`\t\n$x '",
+    "expected": null
+  },
+  {
+    "input": "\n\"\"yya$_\\#ax'\ty\n\\\t",
+    "expected": null
+  },
+  {
+    "input": "_``b ba\"#éa\"_'a\n_\n#b`$a",
+    "expected": null
+  },
+  {
+    "input": "`b$ \ny'a\t'_'",
+    "expected": null
+  },
+  {
+    "input": "\"$a y\r\ra #`bb#ay\\'é#éxyy\nba\n\\\\aé",
+    "expected": null
+  },
+  {
+    "input": "_`\\y\"\n\"x\n\"_$\"`é_y$abé$\r$\ny#\t`\t\rx_",
+    "expected": [
+      "_`y\nx",
+      "_$`é_y$abé$",
+      "$",
+      "y#",
+      "`",
+      "x_"
+    ]
+  },
+  {
+    "input": "'`b",
+    "expected": null
+  },
+  {
+    "input": "y#b$\na\r\nx# `y\r' \\ #y$\r#y\r$\n\r_\t\"é",
+    "expected": null
+  },
+  {
+    "input": "'yy\ra#'\"`é_ \"`#$\nya#\nb#y\"",
+    "expected": null
+  },
+  {
+    "input": "__$ \n$\na__`\"x\n\"b##\r\n\t\\\\\\xby#éx",
+    "expected": [
+      "__$",
+      "$",
+      "a__`x\nb##",
+      "\\xby#éx"
+    ]
+  },
+  {
+    "input": " \r$$ b'y\n\t#$'\\\ryb`#\"\r",
+    "expected": null
+  },
+  {
+    "input": "\\##",
+    "expected": [
+      "##"
+    ]
+  },
+  {
+    "input": "#$_ # \"$ __ax\n''\n\r_y_x#x",
+    "expected": null
+  },
+  {
+    "input": "\r",
+    "expected": []
+  },
+  {
+    "input": "$$yy\\\"",
+    "expected": [
+      "$$yy\""
+    ]
+  },
+  {
+    "input": "x\\x\\",
+    "expected": null
+  },
+  {
+    "input": "\r_\t\t$`\r",
+    "expected": [
+      "_",
+      "$`"
+    ]
+  },
+  {
+    "input": "`yéby$yé`xé\ta`b\r\ryx\té_\n",
+    "expected": [
+      "`yéby$yé`xé",
+      "a`b",
+      "yx",
+      "é_"
+    ]
+  },
+  {
+    "input": " é",
+    "expected": [
+      "é"
+    ]
+  },
+  {
+    "input": "\t\n` \t\r$a \\$'xyaaa\nb'a'x_",
+    "expected": null
+  },
+  {
+    "input": " \n$x#x'",
+    "expected": null
+  },
+  {
+    "input": "é\t\t$$`ba é\t#\"$yy\r\"\taba\t\"\\`\\ `'\\",
+    "expected": null
+  },
+  {
+    "input": "xx#é\\$'` y__xx\tb`\"\ta\"_",
+    "expected": null
+  },
+  {
+    "input": "\\abaé_#``a_é",
+    "expected": [
+      "abaé_#``a_é"
+    ]
+  },
+  {
+    "input": "a_$#\rax a\ry \n\tbx\t \t\ty$\t\t`b '\t",
+    "expected": null
+  },
+  {
+    "input": "`\r$_é#é\"x$$$\\é\n'\\\"` b``#a# x\n\"",
+    "expected": [
+      "`",
+      "$_é#éx$$$\\é\n'\"` b``#a# x\n"
+    ]
+  },
+  {
+    "input": "\\  \né\n \t'\t\n''é#_x#_'_b`é\té$\ra",
+    "expected": [
+      " ",
+      "é",
+      "\t\né#_x#__b`é",
+      "é$",
+      "a"
+    ]
+  },
+  {
+    "input": "b$_\\_a\t `xa\\__b\"`\n`y`'\r$é`$aé\rééxx",
+    "expected": null
+  },
+  {
+    "input": "\"`\\yy '\rb$\n$ xé\taa_$b_$y'\r",
+    "expected": null
+  },
+  {
+    "input": " ",
+    "expected": []
+  },
+  {
+    "input": "y\"\\'ébx",
+    "expected": null
+  },
+  {
+    "input": "_a\"y\\x \rb#\\`\n\\a\t\\_'xx##_'##",
+    "expected": null
+  },
+  {
+    "input": "\\éx#b\n\t \\#é\\\"\n\\`$`",
+    "expected": [
+      "éx#b",
+      "#é\"",
+      "`$`"
+    ]
+  },
+  {
+    "input": "\t#_\\a # a_'x",
+    "expected": null
+  },
+  {
+    "input": "b$`aa#yba\n`'\n`\n\n",
+    "expected": null
+  },
+  {
+    "input": "aé ay\t\té'a_'\r##y \\\\$'\"\"b$\t'é",
+    "expected": [
+      "aé",
+      "ay",
+      "éa_",
+      "##y",
+      "\\$\"\"b$\té"
+    ]
+  },
+  {
+    "input": "\réyé##$\"\r\\é\né\r_\n#_'_a\tb\"``\n\"_xy",
+    "expected": null
+  },
+  {
+    "input": "x\n\r$\ré\"$byx\r$\"\\``\\",
+    "expected": null
+  },
+  {
+    "input": "\t ba\n\"xb\"\\\n\\_\"y\tx\\'\" `b\"`a",
+    "expected": null
+  },
+  {
+    "input": "\t\\é ybby`_$'\ny \r",
+    "expected": null
+  },
+  {
+    "input": "é _ ",
+    "expected": [
+      "é",
+      "_"
+    ]
+  },
+  {
+    "input": "_`y'a#ya\"$'\t",
+    "expected": [
+      "_`ya#ya\"$"
+    ]
+  },
+  {
+    "input": "_é\n\"\nyaé_a`",
+    "expected": null
+  },
+  {
+    "input": "x\\ x ` '_'x_",
+    "expected": [
+      "x x",
+      "`",
+      "_x_"
+    ]
+  },
+  {
+    "input": "\n\"$bxaxy`_\t\\\t\"y'a\"x\r\nyé\n_\n'##`$",
+    "expected": [
+      "$bxaxy`_\t\\\tya\"x\r\nyé\n_\n##`$"
+    ]
+  },
+  {
+    "input": "a \\'x\té \r\tébbx#''b\t\\\né\r\\``\r\"éx$é\"\r",
+    "expected": [
+      "a",
+      "'x",
+      "é",
+      "ébbx#b",
+      "\né",
+      "``",
+      "éx$é"
+    ]
+  },
+  {
+    "input": "'ay'`$_'éby_",
+    "expected": null
+  },
+  {
+    "input": "a#\r\tyé_y'\\\n''_`",
+    "expected": null
+  },
+  {
+    "input": "#xy'#éa\"\"'\r\"'ab_#é$b`\\a#b\\\"xx",
+    "expected": null
+  },
+  {
+    "input": "$x\n\"é_",
+    "expected": null
+  }
+]

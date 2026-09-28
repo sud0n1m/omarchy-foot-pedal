@@ -1,0 +1,25 @@
+   Compiling elgato-foot-pedal v2.0.0 (/home/sudonim/Projects/omarchy-foot-pedal)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.36s
+     Running unittests src/main.rs (target/debug/deps/elgato_foot_pedal-73c0e366068fe45c)
+
+running 17 tests
+test config::tests::shortcut_and_command_validation ... ok
+test config::tests::rejects_duplicate_custom_ids_and_unknown_active ... ok
+test usb_rule::tests::exclusive_creation_refuses_all_existing_paths ... ok
+test daemon::tests::hid_report_fixture ... ok
+test arguments::tests::matches_legacy_python_argument_vectors ... ok
+test daemon::tests::original_edges_and_first_held_report ... ok
+test daemon::tests::preset_persistence_and_invalid_edits ... ok
+test daemon::tests::socket_partial_request_survives_state_push_and_owner_disconnect ... ok
+test daemon::tests::test_owner_and_rearming_and_pause ... ok
+test daemon::tests::media_routes_playing_player_and_errors ... ok
+test daemon::tests::failed_restore_retains_journal_and_retries ... ok
+test daemon::tests::plugin_owner_disconnect_restores_microphone_before_exit ... ok
+test daemon::tests::microphone_initial_unmuted_overlap_and_fast_release ... ok
+test daemon::tests::microphone_release_disconnect_pause_switch_and_recovery ... ok
+test process::tests::timeout_and_bounded_output_and_literal_arguments ... ok
+test daemon::tests::watch_loop_dispatches_hid_and_disconnects ... ok
+test daemon::tests::state_dedup_and_test_expiry_without_idle_polling ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+

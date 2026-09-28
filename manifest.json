@@ -1,20 +1,24 @@
 {
   "schemaVersion": 1,
   "id": "sudonim.foot-pedal",
-  "name": "Foot Pedal",
-  "version": "1.2.2",
+  "name": "Elgato Foot Pedal",
+  "version": "2.0.0",
   "author": "Colin Nederkoorn",
-  "description": "Configurable Stream Deck Pedal presets, actions and input testing",
+  "description": "Elgato Stream Deck Pedal controls: workspace, dictation, media, microphone and custom shortcuts. Efficient Rust worker, automatic plugin lifecycle.",
   "kinds": [
+    "service",
     "bar-widget"
   ],
   "entryPoints": {
-    "barWidget": "plugin/Panel.qml"
+    "barWidget": "plugin/Panel.qml",
+    "service": "plugin/Service.qml"
   },
   "barWidget": {
-    "displayName": "Foot Pedal",
+    "displayName": "Elgato Foot Pedal",
     "category": "System",
     "allowMultiple": false,
     "defaultSection": "right"
-  }
+  },
+  "license": "MIT",
+  "icon": "icon.svg"
 }

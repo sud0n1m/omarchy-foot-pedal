@@ -1,0 +1,11 @@
+test_custom_preset_round_trip_and_validation_preserves_config (test_runtime.RuntimeTests.test_custom_preset_round_trip_and_validation_preserves_config) ... ok
+test_fresh_launch_without_installer_and_shutdown_with_client (test_runtime.RuntimeTests.test_fresh_launch_without_installer_and_shutdown_with_client) ... ok
+test_invalid_config_is_preserved_and_pauses_actions (test_runtime.RuntimeTests.test_invalid_config_is_preserved_and_pauses_actions) ... ok
+test_oversize_request_does_not_break_daemon (test_runtime.RuntimeTests.test_oversize_request_does_not_break_daemon) ... ok
+test_plugin_lifetime_socket_stops_worker_on_disconnect (test_runtime.RuntimeTests.test_plugin_lifetime_socket_stops_worker_on_disconnect) ... ok
+test_single_owner_refuses_duplicate_without_removing_socket (test_runtime.RuntimeTests.test_single_owner_refuses_duplicate_without_removing_socket) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.087s
+
+OK

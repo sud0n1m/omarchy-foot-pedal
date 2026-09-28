@@ -1,0 +1,28 @@
+[
+  {
+    "panel": "closed",
+    "pid": 136759,
+    "connected": true,
+    "discovery": "udev",
+    "seconds": 30.021,
+    "cpu_percent_one_core": 0.0,
+    "voluntary_context_switches": 0,
+    "involuntary_context_switches": 0,
+    "rss_kib": 3464,
+    "pss_kib": 1291,
+    "unsolicited_state_packets": 0
+  },
+  {
+    "panel": "open",
+    "pid": 136759,
+    "connected": true,
+    "discovery": "udev",
+    "seconds": 30.029,
+    "cpu_percent_one_core": 0.0,
+    "voluntary_context_switches": 0,
+    "involuntary_context_switches": 0,
+    "rss_kib": 3584,
+    "pss_kib": 1410,
+    "unsolicited_state_packets": 0
+  }
+]

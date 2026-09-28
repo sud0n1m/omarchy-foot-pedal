@@ -1,0 +1,20 @@
+[package]
+name = "elgato-foot-pedal"
+version = "2.0.0"
+edition = "2024"
+license = "MIT"
+description = "Event-driven Elgato Stream Deck Pedal controls for Omarchy"
+
+[dependencies]
+libc = "0.2"
+serde_json = "1"
+tokio = { version = "1", features = ["rt", "macros", "net", "io-util", "process", "signal", "sync", "time"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
