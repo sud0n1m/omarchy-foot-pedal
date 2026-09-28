@@ -119,9 +119,11 @@ records actual installed UI and theme checks and distinguishes physical tests
 from simulated ones. Real pedal presses and USB unplug/replug still need human
 acceptance; no fresh-machine hardware claim is made.
 
-Connected idle samples measured about **16 MiB PSS**, with no CPU ticks or
-context switches over 30 seconds, with the panel open and closed. This excludes
-the existing Omarchy shell and does not measure action execution cost.
+With the pedal unplugged, 30-second samples measured **16.7–16.8 MiB PSS**,
+zero CPU ticks and zero state broadcasts, with the panel closed and open. There
+was one voluntary wakeup in the closed sample and none in the open sample.
+This excludes the existing Omarchy shell and does not measure action execution
+cost. See the [measurements](docs/verification/disconnected-idle-measurement.json).
 
 - [Usage and action behavior](docs/usage.md)
 - [Paper designs and exported artboards](docs/design/README.md)

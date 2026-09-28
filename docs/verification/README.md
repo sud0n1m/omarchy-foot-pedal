@@ -5,7 +5,7 @@ connected; its process owns one `/dev/hidraw0` handle. Required Wayland,
 Hyprland and session-bus environment is present. Startup is enabled, dispatch
 is on, and **Workspaces + dictation** is active with no action errors.
 
-- [30 backend tests](backend-tests.txt) passed: original commands/press edges,
+- [41 backend and lifecycle tests](backend-tests.txt) passed: original commands/press edges,
   config validation and persistence, immutable built-ins, test suppression and
   ownership, disconnect, rapid release, pause/preset-change microphone restore,
   overlapping holds, crash recovery/retry, media routing, and per-pedal errors.
@@ -66,6 +66,8 @@ Screenshots from the actual installed panel:
 - [Shortcut editor](03-edit-shortcut.png)
 - [Input test](04-test-pedals.png)
 - [Light theme](05-light-theme.png)
+- [First-run setup](06-install-controls.png)
+- [Disconnected pedal](07-disconnected.png)
 
 [Installed status](installed-status.json) records the final configuration and
 connection. `input_ready: false` means no physical report has arrived since the
@@ -75,3 +77,36 @@ Physical presses, USB unplug/replug, and real microphone hold/release remain
 for the user to exercise. Those transitions have automated fixture coverage;
 they were not claimed as physical hardware tests. No dictation recording,
 real microphone mute/unmute, or media playback action was triggered for testing.
+
+
+## Public release 1.2.1
+
+- 41 tests pass locally and in GitHub Actions on Python 3.12 and 3.14.
+- Root manifest validates with stock Omarchy; the optional device-specific
+  rule passes `udevadm verify`. No root rule was installed during this pass.
+- Actual stock plugin add/remove/re-add and update paths were exercised on
+  Omarchy 4.0.4. The native panel upgraded the legacy service, uninstalled it,
+  and installed a fresh service while preserving saved presets byte-for-byte.
+- The independent `foot-pedal-uninstall` also worked after the Git-managed
+  plugin folder had already been removed. Service stop and executable removal
+  were checked before reinstalling. Startup remains enabled and the original
+  workspaces/dictation configuration remains active.
+- Unit fixtures separately cover first-time default creation, disabled startup
+  preservation, failure reporting, locally modified payload preservation, and
+  uninstallation with saved configuration retained. These are isolated tests,
+  not a second physical machine.
+- During this release pass the owner disconnected the pedal. The daemon now
+  uses filtered libudev events through its existing asyncio loop, with no
+  helper process or periodic discovery timer when the monitor is available.
+  Actual monitor startup is verified; a pipe fixture verifies that a hotplug
+  notification opens the device and dispatches a subsequent HID report.
+- [Unplugged idle measurements](disconnected-idle-measurement.json): separate
+  30-second samples with the panel closed/open, zero measured CPU ticks and zero
+  unsolicited state packets in both; one voluntary context switch closed and
+  zero open. PSS was 17,132–17,185 KiB (16.7–16.8 MiB). Hardware notifications can
+  wake the daemon; this is not a claim of zero CPU cost for device events.
+- A two-second discovery fallback remains for unavailable notifications or
+  failed device access. Failed microphone restores also retain bounded retries.
+
+Physical reconnection and real pedal/microphone actuation remain manual
+acceptance items. The release has not been tested on a second physical machine.
