@@ -16,6 +16,14 @@ Panel {
     property var state: ({connected:false,input_ready:false,startup:false,presets:[], actions:[], sources:[], pressed:[false,false,false], errors:[], enabled:false})
     property string focusedControl: ""
     property bool online: false
+    readonly property string releaseVersion: "1.2.0"
+    readonly property string managerPath: decodeURIComponent(Qt.resolvedUrl("../scripts/manage.py").toString().replace(/^file:\/\//, ""))
+    property var installation: ({installed:false,version:""})
+    property bool installationChecked: false
+    property bool removePrompt: false
+    property string setupMessage: ""
+    readonly property bool maintenance: manager.running
+    readonly property bool needsUpdate: online && state.version !== releaseVersion
     property string error: ""
     property string page: "main"
     property string selectedPreset: "workspaces"
@@ -37,7 +45,7 @@ Panel {
     function chord(a) { return (a.modifiers || []).map(function(m){return {ctrl:"Ctrl",shift:"Shift",alt:"Alt",logo:"Super"}[m]}).concat(a.key || []).join(" + ") }
     function navigate(to) { page=to; error=""; discardPrompt=false; scroll.contentY=0; Qt.callLater(function(){keys.forceActiveFocus()}) }
     function request(op, extra) {
-        if (!online) {if (op!=="refresh" && op!=="test_heartbeat") error="Controls aren't running. Use Start controls below.";return}
+        if (!online) {if (op!=="refresh" && op!=="test_heartbeat") error="Controls aren't running. Install or start controls below.";return}
         var msg=extra || {}; msg.op=op;msg.id=++serial
         if (op!=="test_heartbeat" && op!=="refresh") {pending=true;pendingOp=op; requestTimeout.restart()}
         if (op==="refresh") connectionTimeout.restart()
@@ -99,7 +107,7 @@ Panel {
     }
     onOpenedChanged: {
         recording=false
-        if(opened){request("refresh");if(page==="main")selectedPreset=state.active || "workspaces"}
+        if(opened){probe.running=true;request("refresh");if(page==="main")selectedPreset=state.active || "workspaces"}
         else if(testing)request("test_end")
     }
     function disconnected() {
@@ -108,7 +116,7 @@ Panel {
     function timedOut() {
         connection.connected=false;disconnected();error="Request timed out. Check controls and try again."
     }
-    Component.onCompleted: connection.connected=true
+    Component.onCompleted: {connection.connected=true;probe.running=true}
     Socket {
         id: connection
         path: Quickshell.env("XDG_RUNTIME_DIR")+"/foot-pedal/control.sock"
@@ -127,9 +135,31 @@ Panel {
         onTriggered:root.request("test_heartbeat")
     }
     Process {id: starter;command:["systemctl","--user","start","streamdeck-pedal-actions.service"];onExited:function(code){if(code!==0)root.error="Unable to start pedal controls. Check the user service journal.";else {root.error="";reconnect.restart()}}}
+    Process {
+        id: probe
+        command:["python3",root.managerPath,"status"]
+        stdout: SplitParser {onRead:function(data){try {root.installation=JSON.parse(data);root.installationChecked=true} catch(e){root.error="Could not check controls installation"}}}
+        onExited:function(code){if(code!==0)root.error="Could not check controls. Verify Python 3 is installed."}
+    }
+    function manage(action) {
+        removePrompt=false;error="";setupMessage="";manager.result=({});manager.action=action;manager.running=true
+    }
+    Process {
+        id: manager
+        property string action: "install"
+        property var result: ({})
+        command:["python3",root.managerPath,action]
+        stdout: SplitParser {onRead:function(data){try {manager.result=JSON.parse(data)} catch(e){}}}
+        onExited:function(code){
+            if(code!==0 || !result.ok)root.error=result.error || "Controls setup failed. Run install.sh in a terminal for details."
+            else {root.setupMessage=result.message;root.navigate("main")}
+            probe.running=true
+            if(action==="install")reconnect.restart()
+        }
+    }
     IpcHandler {
         target:"sudonim.foot-pedal-status"
-        function status():string{return JSON.stringify({online:root.online,page:root.page,opened:root.opened,dirty:root.dirty,selectedPreset:root.selectedPreset,draft:root.draft,focus:root.focusedControl,recording:root.recording,pending:root.pending,error:root.error,state:root.state,theme:{background:String(Color.popups.background),text:String(root.fg),accent:String(Color.accent),font:Style.font.family,radius:Style.cornerRadius},geometry:{x:popup.cardOrigin.x,y:popup.cardOrigin.y,width:popup.contentWidth,height:popup.contentHeight}})}
+        function status():string{return JSON.stringify({online:root.online,page:root.page,opened:root.opened,dirty:root.dirty,selectedPreset:root.selectedPreset,draft:root.draft,focus:root.focusedControl,recording:root.recording,pending:root.pending,error:root.error,state:root.state,installation:root.installation,maintenance:root.maintenance,setupMessage:root.setupMessage,theme:{background:String(Color.popups.background),text:String(root.fg),accent:String(Color.accent),font:Style.font.family,radius:Style.cornerRadius},geometry:{x:popup.cardOrigin.x,y:popup.cardOrigin.y,width:popup.contentWidth,height:popup.contentHeight}})}
     }
     component Label: Text {
         color:root.fg;font.family:Style.font.family;font.pixelSize:Style.font.body
@@ -138,7 +168,7 @@ Panel {
     component Caption: Label {font.pixelSize:Style.font.bodySmall;opacity:0.75}
     component Action: Button {
         objectName:text
-        foreground:root.fg;fontFamily:Style.font.family;focusable:true;enabled:!root.pending
+        foreground:root.fg;fontFamily:Style.font.family;focusable:true;enabled:!root.pending && !root.maintenance
         implicitHeight:Math.max(Style.space(32),implicitContentHeight)
         property real implicitContentHeight:Style.space(32)
         opacity:enabled ? 1 : 0.45
@@ -206,7 +236,7 @@ Panel {
                 id:scroll;anchors.fill:parent;contentHeight:content.implicitHeight;clip:true;boundsBehavior:Flickable.StopAtBounds
                 Controls.ScrollBar.vertical:Controls.ScrollBar {}
                 Column {
-                    id:content;width:parent.width;spacing:Style.spacing.panelGap
+                    id:content;width:parent.width;spacing:Style.spacing.panelGap;enabled:!root.maintenance
                     Row {
                         width:parent.width
                         Column {
@@ -217,7 +247,15 @@ Panel {
                         Action {id:closeButton;text:root.page==="main" ? "×" : "←";onClicked:root.back();tooltipText:root.page==="main" ? "Close" : "Back"}
                     }
                     Label {width:parent.width;visible:root.error!=="" || !!root.state.config_error;text:root.error || root.state.config_error || "";color:Color.urgent}
-                    Action {visible:!root.online;text:"Start controls";bordered:true;onClicked:starter.running=true}
+                    Caption {width:parent.width;visible:root.maintenance || root.setupMessage!=="";text:root.maintenance ? "Updating controls…" : root.setupMessage}
+                    Column {
+                        width:parent.width;spacing:Style.space(8)
+                        visible:root.installationChecked && (!root.installation.installed || root.needsUpdate)
+                        Caption {width:parent.width;text:root.needsUpdate ? "A controls update is ready. Your presets and startup preference will be kept." : "Install the background controls to use the pedal. This adds a user service and starts it at sign-in. No administrator access is needed."}
+                        Action {text:root.needsUpdate ? "Update controls" : "Install controls";bordered:true;onClicked:root.manage("install")}
+                    }
+                    Action {visible:!root.online && root.installation.installed;text:"Start controls";bordered:true;onClicked:starter.running=true}
+                    Caption {width:parent.width;visible:root.state.device_error==="Device access denied";text:"USB access needs setup. Follow the USB permissions instructions in the plugin README, then reconnect the pedal."}
                     Column {
                         visible:root.discardPrompt;width:parent.width;spacing:Style.space(8)
                         Label {text:"Discard unsaved changes?";font.bold:true}
@@ -244,6 +282,12 @@ Panel {
                         Toggle {width:parent.width;label:"Start at sign-in · "+(root.state.startup ? "On" : "Off");description:"Keep your controls ready in the background.";checked:root.state.startup===true;foreground:root.fg;enabled:root.online && !root.pending;onClicked:root.request("startup",{value:!root.state.startup})}
                         Divider {}
                         Row {width:parent.width;Caption {width:parent.width-testButton.width;anchors.verticalCenter:parent.verticalCenter;text:root.pending ? "Saving…" : "All changes saved"} Action {id:testButton;text:"Test pedals";bordered:true;enabled:root.online && root.state.connected && !root.pending;onClicked:root.request("test_start")}}
+                        Action {text:"Uninstall controls…";visible:root.installation.installed && root.installation.version!=="";onClicked:root.removePrompt=true}
+                        Column {
+                            visible:root.removePrompt;width:parent.width;spacing:Style.space(8)
+                            Caption {width:parent.width;text:"Stop and remove the pedal service and launchers? Saved presets will be kept. You can remove the bar plugin afterward."}
+                            Row {spacing:Style.space(8);Action {text:"Keep controls";onClicked:root.removePrompt=false} Action {text:"Uninstall controls";bordered:true;onClicked:root.manage("uninstall")}}
+                        }
                     }
                     Column {
                         visible:root.page==="presets";width:parent.width;spacing:Style.spacing.panelGap

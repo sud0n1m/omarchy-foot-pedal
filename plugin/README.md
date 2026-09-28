@@ -1,7 +1,7 @@
 # Foot Pedal · Omarchy plugin
 
 Native panel for the configurable Elgato Stream Deck Pedal service. Installed
-in the right bar after Wave XLR; `foot-pedal` opens it from the application menu.
+in the right bar; `foot-pedal` opens it from the application menu.
 
 [Setup, restore and behavior](../docs/usage.md).
 [Paper design](../docs/design/README.md).
@@ -16,3 +16,6 @@ until Save & use. No generated Paper hex values are embedded in the plugin.
 `sudonim.foot-pedal-status status` provides read-only diagnostics, including the
 current draft, actual state, focused control and resolved theme. Command drafts
 may contain private user-entered arguments; do not publish arbitrary diagnostics.
+
+The root manifest loads this panel. Install/update controls explicitly from the
+panel; see the [repository README](../README.md) for lifecycle and USB setup.

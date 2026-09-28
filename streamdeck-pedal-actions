@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Foot Pedal: single-owner HID daemon, local RPC, and Omarchy panel bridge."""
+"""Foot Pedal: single-owner HID daemon, local RPC, and native Omarchy panel."""
 import argparse
 import asyncio
 import copy
@@ -17,6 +17,7 @@ import tempfile
 import time
 import uuid
 
+VERSION = "1.2.0"
 VENDOR_ID, PRODUCT_ID = "0fd9", "0086"
 CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "foot-pedal/config.json"
 RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")) / "foot-pedal"
@@ -152,7 +153,7 @@ class Daemon:
     def presets(self): return copy.deepcopy(BUILTINS) + copy.deepcopy(self.config["presets"])
     def active(self): return next(p for p in self.presets() if p["id"]==self.config["active"])
     def status(self):
-        return {"connected":self.connected,"device_error":self.device_error,"config_error":self.config_error,
+        return {"version":VERSION,"connected":self.connected,"device_error":self.device_error,"config_error":self.config_error,
                 "input_ready":self.baseline,"enabled":self.config["enabled"],"startup":self.startup,"active":self.config["active"],"presets":self.presets(),
                 "pressed":self.pressed,"last_input":self.last_input,"errors":self.errors,"busy":sorted(self.busy),
                 "testing":self.test_owner is not None,"sources":self.sources,

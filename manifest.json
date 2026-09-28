@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "sudonim.foot-pedal",
+  "name": "Foot Pedal",
+  "version": "1.2.0",
+  "author": "Colin Nederkoorn",
+  "description": "Configurable Stream Deck Pedal presets, actions and input testing",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "plugin/Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Foot Pedal",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

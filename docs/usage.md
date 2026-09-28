@@ -1,6 +1,6 @@
 # Foot Pedal
 
-Installed 2026-09-27. A native Omarchy panel and a single-owner background
+First installed 2026-09-27. A native Omarchy panel and a single-owner background
 service for the Elgato Stream Deck Pedal (`0fd9:0086`).
 
 Open **Foot Pedal** in the app launcher, click the three-pedal icon next to
@@ -80,24 +80,11 @@ The UI binds directly to `Color.popups`, `Color.accent`, `Style.font`, native
 fonts, borders and corner rounding update through Omarchy's existing machinery.
 There is no private theme setting or hardcoded Tokyo Night palette.
 
-## Restore
+## Installation and removal
 
-From this checkout in a running Omarchy user session:
-
-```bash
-./install.sh
-foot-pedal
-```
-
-The installer installs user files, preserves existing presets, enables/restarts
-the service, enables the bar widget, and restarts the shell once to clear cached
-QML imports. It places the widget after Wave XLR when that widget is enabled.
-
-Python 3 and the Omarchy shell are required. Action dependencies are checked:
-`hyprctl`, `voxtype`, `busctl`, `pactl`, and `wtype`. No extra package or root
-permission was needed on this workstation. Its existing active-seat uaccess ACL
-permits `/dev/hidraw0`; a fresh machine must give the signed-in user access to
-the matching pedal node. Do not solve access errors with world-writable devices.
+See the [current installation, update, USB access, and removal instructions](../README.md).
+Use Omarchy to install the plugin and its explicit Install controls action for
+the companion service. Saved presets survive upgrades and removal.
 
 ## Verification and troubleshooting
 

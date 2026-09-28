@@ -239,7 +239,7 @@ asyncio.run(m.Daemon().serve())
         with self.assertRaisesRegex(RuntimeError, 'timed out'):
             await real_run('/usr/bin/sleep','10',timeout=.05)
     async def test_actual_process_output_is_bounded(self):
-        result=await real_run('/usr/bin/python','-c','print("x" * 1000000)')
+        result=await real_run(sys.executable,'-c','print("x" * 1000000)')
         self.assertEqual(len(result),65536)
     async def test_actual_argv_never_expands_shell(self):
         result=await real_run('/usr/bin/printf','%s','$(echo should-not-run)')

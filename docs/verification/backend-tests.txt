@@ -28,8 +28,16 @@ test_actual_argv_never_expands_shell (test_daemon.ProcessTests.test_actual_argv_
 test_actual_command_timeout (test_daemon.ProcessTests.test_actual_command_timeout) ... ok
 test_actual_process_output_is_bounded (test_daemon.ProcessTests.test_actual_process_output_is_bounded) ... ok
 test_daemon_shutdown_with_connected_client (test_daemon.ProcessTests.test_daemon_shutdown_with_connected_client) ... ok
+test_failed_start_is_reported_and_remains_removable (test_install.InstallTests.test_failed_start_is_reported_and_remains_removable) ... ok
+test_fresh_install_payload_permissions_and_startup (test_install.InstallTests.test_fresh_install_payload_permissions_and_startup) ... ok
+test_uninstall_aborts_if_stop_fails (test_install.InstallTests.test_uninstall_aborts_if_stop_fails) ... ok
+test_uninstall_preserves_modified_payload (test_install.InstallTests.test_uninstall_preserves_modified_payload) ... ok
+test_uninstall_stops_first_and_keeps_presets (test_install.InstallTests.test_uninstall_stops_first_and_keeps_presets) ... ok
+test_uninstall_works_after_plugin_checkout_removed (test_install.InstallTests.test_uninstall_works_after_plugin_checkout_removed) ... ok
+test_upgrade_preserves_custom_config_and_disabled_startup (test_install.InstallTests.test_upgrade_preserves_custom_config_and_disabled_startup) ... ok
+test_versions_and_root_manifest_agree (test_install.InstallTests.test_versions_and_root_manifest_agree) ... ok
 
 ----------------------------------------------------------------------
-Ran 30 tests in 2.599s
+Ran 38 tests in 2.851s
 
 OK

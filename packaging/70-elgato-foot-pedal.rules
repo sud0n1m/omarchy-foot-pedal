@@ -1,0 +1,2 @@
+# Elgato Stream Deck Pedal only. Grant the active local seat access via logind.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0086", TAG+="uaccess"
