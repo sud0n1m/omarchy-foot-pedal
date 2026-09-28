@@ -20,7 +20,6 @@ Panel {
     readonly property string managerPath: decodeURIComponent(Qt.resolvedUrl("../scripts/manage.py").toString().replace(/^file:\/\//, ""))
     property var installation: ({installed:false,version:""})
     property bool installationChecked: false
-    property bool removePrompt: false
     property string setupMessage: ""
     readonly property bool maintenance: manager.running
     readonly property bool needsUpdate: (online && state.version !== releaseVersion) || (installationChecked && installation.installed && installation.version !== releaseVersion)
@@ -141,20 +140,19 @@ Panel {
         stdout: SplitParser {onRead:function(data){try {root.installation=JSON.parse(data);root.installationChecked=true} catch(e){root.error="Could not check controls installation"}}}
         onExited:function(code){if(code!==0)root.error="Could not check controls. Verify Python 3 is installed."}
     }
-    function manage(action) {
-        removePrompt=false;error="";setupMessage="";manager.result=({});manager.action=action;manager.running=true
+    function installControls() {
+        error="";setupMessage="";manager.result=({});manager.running=true
     }
     Process {
         id: manager
-        property string action: "install"
         property var result: ({})
-        command:["python3",root.managerPath,action]
+        command:["python3",root.managerPath,"install"]
         stdout: SplitParser {onRead:function(data){try {manager.result=JSON.parse(data)} catch(e){}}}
         onExited:function(code){
             if(code!==0 || !result.ok)root.error=result.error || "Controls setup failed. Run install.sh in a terminal for details."
             else {root.setupMessage=result.message;root.navigate("main")}
             probe.running=true
-            if(action==="install")reconnect.restart()
+            reconnect.restart()
         }
     }
     IpcHandler {
@@ -247,12 +245,12 @@ Panel {
                         Action {id:closeButton;text:root.page==="main" ? "×" : "←";onClicked:root.back();tooltipText:root.page==="main" ? "Close" : "Back"}
                     }
                     Label {width:parent.width;visible:root.error!=="" || !!root.state.config_error;text:root.error || root.state.config_error || "";color:Color.urgent}
-                    Caption {width:parent.width;visible:root.maintenance || root.setupMessage!=="";text:root.maintenance ? (manager.action==="uninstall" ? "Removing controls…" : "Installing controls…") : root.setupMessage}
+                    Caption {width:parent.width;visible:root.maintenance || root.setupMessage!=="";text:root.maintenance ? "Installing controls…" : root.setupMessage}
                     Column {
                         width:parent.width;spacing:Style.space(8)
                         visible:root.installationChecked && (!root.installation.installed || root.needsUpdate)
                         Caption {width:parent.width;text:root.needsUpdate ? "A controls update is ready. Your presets and startup preference will be kept." : "Install the background controls to use the pedal. This adds a user service and starts it at sign-in. No administrator access is needed."}
-                        Action {text:root.needsUpdate ? "Update controls" : "Install controls";bordered:true;onClicked:root.manage("install")}
+                        Action {text:root.needsUpdate ? "Update controls" : "Install controls";bordered:true;onClicked:root.installControls()}
                     }
                     Action {visible:!root.online && root.installation.installed;text:"Start controls";bordered:true;onClicked:starter.running=true}
                     Caption {width:parent.width;visible:root.state.device_error==="Device access denied";text:"USB access needs setup. Follow the USB permissions instructions in the plugin README, then reconnect the pedal."}
@@ -282,12 +280,6 @@ Panel {
                         Toggle {width:parent.width;label:"Start at sign-in · "+(root.state.startup ? "On" : "Off");description:"Keep your controls ready in the background.";checked:root.state.startup===true;foreground:root.fg;enabled:root.online && !root.pending;onClicked:root.request("startup",{value:!root.state.startup})}
                         Divider {}
                         Row {width:parent.width;Caption {width:parent.width-testButton.width;anchors.verticalCenter:parent.verticalCenter;text:root.pending ? "Saving…" : "All changes saved"} Action {id:testButton;text:"Test pedals";bordered:true;enabled:root.online && root.state.connected && !root.pending;onClicked:root.request("test_start")}}
-                        Action {text:"Uninstall controls…";visible:root.installation.installed && root.installation.version!=="";onClicked:root.removePrompt=true}
-                        Column {
-                            visible:root.removePrompt;width:parent.width;spacing:Style.space(8)
-                            Caption {width:parent.width;text:"Stop and remove the pedal service and launchers? Saved presets will be kept. You can remove the bar plugin afterward."}
-                            Row {spacing:Style.space(8);Action {text:"Keep controls";onClicked:root.removePrompt=false} Action {text:"Uninstall controls";bordered:true;onClicked:root.manage("uninstall")}}
-                        }
                     }
                     Column {
                         visible:root.page==="presets";width:parent.width;spacing:Style.spacing.panelGap

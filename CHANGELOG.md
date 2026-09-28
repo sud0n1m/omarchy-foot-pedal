@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Remove uninstall from the main panel. Removal remains available through
+  `foot-pedal-uninstall` followed by Omarchy’s plugin manager.
+
 ## 1.2.2
 
 - Preflight every installed path before any writes. Refuse unrelated files,

@@ -86,7 +86,7 @@ If you previously installed the 1.1 local snapshot, use the
 
 ## Remove
 
-Choose **Uninstall controls…** in the panel and confirm, or run:
+Remove the background controls, then remove the panel through Omarchy’s plugin manager:
 
 ```bash
 foot-pedal-uninstall
