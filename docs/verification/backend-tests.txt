@@ -5,6 +5,7 @@ test_disconnect_restores_microphone (test_daemon.DaemonTests.test_disconnect_res
 test_error_visible_per_pedal (test_daemon.DaemonTests.test_error_visible_per_pedal) ... ok
 test_failed_restore_retains_recovery_and_can_retry (test_daemon.DaemonTests.test_failed_restore_retains_recovery_and_can_retry) ... ok
 test_first_held_report_does_not_fire (test_daemon.DaemonTests.test_first_held_report_does_not_fire) ... ok
+test_hotplug_notification_opens_hid_and_dispatches_report (test_daemon.DaemonTests.test_hotplug_notification_opens_hid_and_dispatches_report) ... ok
 test_malformed_config_is_preserved (test_daemon.DaemonTests.test_malformed_config_is_preserved) ... ok
 test_media_action_routes_mpris (test_daemon.DaemonTests.test_media_action_routes_mpris) ... ok
 test_microphone_preserves_unmuted_initial_state (test_daemon.DaemonTests.test_microphone_preserves_unmuted_initial_state) ... ok
@@ -22,6 +23,8 @@ test_socket_deduplicates_state_but_initial_state_is_always_sent (test_daemon.Dae
 test_status_caches_dependencies_until_refresh (test_daemon.DaemonTests.test_status_caches_dependencies_until_refresh) ... ok
 test_switch_restores_microphone (test_daemon.DaemonTests.test_switch_restores_microphone) ... ok
 test_test_mode_suppresses_and_requires_release (test_daemon.DaemonTests.test_test_mode_suppresses_and_requires_release) ... ok
+test_unavailable_udev_falls_back_to_discovery (test_daemon.DaemonTests.test_unavailable_udev_falls_back_to_discovery) ... ok
+test_unplugged_udev_watch_has_no_timer_and_reacts_to_notifications (test_daemon.DaemonTests.test_unplugged_udev_watch_has_no_timer_and_reacts_to_notifications) ... ok
 test_validation_does_not_overwrite_config (test_daemon.DaemonTests.test_validation_does_not_overwrite_config) ... ok
 test_watch_retries_discovery_and_failed_restore_without_busy_loop (test_daemon.DaemonTests.test_watch_retries_discovery_and_failed_restore_without_busy_loop) ... ok
 test_actual_argv_never_expands_shell (test_daemon.ProcessTests.test_actual_argv_never_expands_shell) ... ok
@@ -38,6 +41,6 @@ test_upgrade_preserves_custom_config_and_disabled_startup (test_install.InstallT
 test_versions_and_root_manifest_agree (test_install.InstallTests.test_versions_and_root_manifest_agree) ... ok
 
 ----------------------------------------------------------------------
-Ran 38 tests in 2.851s
+Ran 41 tests in 3.127s
 
 OK

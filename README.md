@@ -13,7 +13,7 @@ including live theme changes. Released under the [MIT license](LICENSE).
   no-action assignments. Save, duplicate, and delete custom presets.
 - Shortcut recording and a test mode that shows input without running actions.
 - Pause controls and startup at sign-in.
-- One Python daemon, a direct native UI socket, and no connected idle polling.
+- One Python daemon, a direct native UI socket, and no idle discovery polling while connected or unplugged.
 
 The **Workspaces + dictation** preset preserves the original mapping:
 
@@ -24,7 +24,7 @@ The **Workspaces + dictation** preset preserves the original mapping:
 ## Install
 
 Requires an Omarchy 4 desktop, Python 3.12 or newer, systemd user services, and
-an Elgato Stream Deck Pedal (`0fd9:0086`). Tested on Omarchy 4.0.4. No Python
+an Elgato Stream Deck Pedal (`0fd9:0086`). Tested on Omarchy 4.0.4. The system libudev library supplies filtered device notifications. No Python
 packages need to be installed. Individual actions use `hyprctl`, `voxtype`,
 `busctl`, `pactl`, or `wtype`; the panel identifies missing dependencies.
 
@@ -63,7 +63,9 @@ sudo udevadm control --reload-rules
 
 Unplug and reconnect the pedal afterward. Do not run the daemon as root or make
 all HID devices world-writable. No rule is needed if your system already grants
-access. The service detects reconnection automatically.
+access. The service detects reconnection through filtered libudev events. It sleeps
+while unplugged and rescans when a HID device changes. A two-second fallback
+is used only when notifications are unavailable or device access fails.
 
 ## Update
 

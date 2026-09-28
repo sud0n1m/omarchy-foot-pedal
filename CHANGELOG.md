@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1
+
+- Filtered libudev notifications replace unplugged-state polling. No helper
+  process and no periodic discovery when the monitor is available.
+- Retain two-second discovery for unavailable notifications or access errors.
+- Add tests for unplugged idle sleep, notification-driven reconnect, actual
+  HID report dispatch through a pipe fixture, and notification fallback.
+
 ## 1.2.0
 
 - Standard Omarchy Git plugin installation through a root manifest.

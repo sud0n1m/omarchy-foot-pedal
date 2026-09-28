@@ -16,7 +16,7 @@ Panel {
     property var state: ({connected:false,input_ready:false,startup:false,presets:[], actions:[], sources:[], pressed:[false,false,false], errors:[], enabled:false})
     property string focusedControl: ""
     property bool online: false
-    readonly property string releaseVersion: "1.2.0"
+    readonly property string releaseVersion: "1.2.1"
     readonly property string managerPath: decodeURIComponent(Qt.resolvedUrl("../scripts/manage.py").toString().replace(/^file:\/\//, ""))
     property var installation: ({installed:false,version:""})
     property bool installationChecked: false

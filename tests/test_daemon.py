@@ -8,7 +8,7 @@ import tempfile
 import sys
 import os
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 path=Path(__file__).resolve().parents[1]/'streamdeck-pedal-actions'
 loader=importlib.machinery.SourceFileLoader('pedal',str(path)); spec=importlib.util.spec_from_loader(loader.name,loader); pedal=importlib.util.module_from_spec(spec);loader.exec_module(pedal)
@@ -189,6 +189,46 @@ class DaemonTests(unittest.IsolatedAsyncioTestCase):
                 await asyncio.sleep(.03);timed_wait.assert_not_called()
             finally:
                 task.cancel();await asyncio.gather(task,return_exceptions=True);self.d.fd=None
+
+    async def test_unplugged_udev_watch_has_no_timer_and_reacts_to_notifications(self):
+        self.d.monitor=Mock()
+        real_wait=asyncio.wait_for
+        with patch.object(pedal,'find_pedal',return_value=None) as discover, patch.object(pedal.asyncio,'wait_for',wraps=real_wait) as timed_wait:
+            task=asyncio.create_task(self.d.watch())
+            try:
+                await asyncio.sleep(.04)
+                self.assertEqual(discover.call_count,1);timed_wait.assert_not_called()
+                self.d.monitor.receive.side_effect=[True,False]
+                self.d.device_changed()
+                await asyncio.sleep(.04)
+                self.assertEqual(discover.call_count,2);timed_wait.assert_not_called()
+                for _ in range(5):self.d.publish();await asyncio.sleep(.01)
+                self.assertEqual(discover.call_count,2);timed_wait.assert_not_called()
+            finally:task.cancel();await asyncio.gather(task,return_exceptions=True)
+
+    async def test_hotplug_notification_opens_hid_and_dispatches_report(self):
+        read_fd,write_fd=os.pipe()
+        os.set_blocking(read_fd,False)
+        self.d.monitor=Mock()
+        with patch.object(pedal,'find_pedal',side_effect=[None,Path('/fixture/hidraw0')]), patch.object(pedal.os,'open',return_value=read_fd):
+            task=asyncio.create_task(self.d.watch())
+            try:
+                await asyncio.sleep(.02)
+                self.d.monitor.receive.side_effect=[True,False];self.d.device_changed()
+                await asyncio.sleep(.02)
+                self.assertEqual(self.d.fd,read_fd);self.assertTrue(self.d.connected)
+                os.write(write_fd,bytes(8));await asyncio.sleep(.02)
+                os.write(write_fd,bytes([0,0,0,0,0,1,0,0]));await asyncio.sleep(.02);await self.drain()
+                self.assertIn(('voxtype','record','toggle'),self.calls)
+            finally:
+                task.cancel();await asyncio.gather(task,return_exceptions=True)
+                asyncio.get_running_loop().remove_reader(read_fd);os.close(read_fd);os.close(write_fd);self.d.fd=None
+
+    async def test_unavailable_udev_falls_back_to_discovery(self):
+        with patch.object(pedal,'DeviceMonitor',side_effect=OSError('Unavailable')):
+            self.d.start_monitor()
+        self.assertIsNone(self.d.monitor)
+        self.assertEqual(self.d.status()['discovery'],'poll')
 
     async def test_watch_retries_discovery_and_failed_restore_without_busy_loop(self):
         self.d.holds={'mic':{'muted':True,'owners':set()}}

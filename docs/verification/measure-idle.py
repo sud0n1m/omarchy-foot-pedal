@@ -3,6 +3,7 @@
 Run without pedal input. Includes an idle subscriber to count state packets.
 PSS excludes the existing shared Omarchy shell; CPU is percent of one core.
 """
+import argparse
 import json
 import os
 from pathlib import Path
@@ -27,6 +28,9 @@ def sample(pid):
         'pss_kib': int(memory['Pss'].split()[0]),
     }
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--disconnected", action="store_true")
+args = parser.parse_args()
 results = []
 for opened in (False, True):
     command('omarchy-shell', 'sudonim.foot-pedal', 'open' if opened else 'close')
@@ -38,7 +42,7 @@ for opened in (False, True):
         while b'\n' not in initial:
             initial += client.recv(65536)
         state = json.loads(initial.split(b'\n')[0])['state']
-        assert state['connected'] and not state['testing']
+        assert state['connected'] != args.disconnected and not state['testing']
         before = sample(pid)
         start = time.monotonic()
         traffic = b''
@@ -52,6 +56,7 @@ for opened in (False, True):
         after = sample(pid)
     result = {
         'panel': 'open' if opened else 'closed', 'pid': pid,
+        'connected': state['connected'], 'discovery': state.get('discovery', 'poll'),
         'seconds': round(duration, 3),
         'cpu_percent_one_core': (after['cpu_ticks'] - before['cpu_ticks']) / os.sysconf('SC_CLK_TCK') / duration * 100,
         'voluntary_context_switches': after['voluntary_switches'] - before['voluntary_switches'],
@@ -61,4 +66,4 @@ for opened in (False, True):
     }
     results.append(result)
     print(json.dumps(result), flush=True)
-Path(__file__).with_name('idle-measurement.json').write_text(json.dumps(results, indent=2) + '\n')
+Path(__file__).with_name('disconnected-idle-measurement.json' if args.disconnected else 'idle-measurement.json').write_text(json.dumps(results, indent=2) + '\n')

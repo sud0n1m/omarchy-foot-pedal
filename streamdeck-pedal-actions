@@ -3,6 +3,8 @@
 import argparse
 import asyncio
 import copy
+import ctypes
+import errno
 import fcntl
 import json
 import os
@@ -17,7 +19,7 @@ import tempfile
 import time
 import uuid
 
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 VENDOR_ID, PRODUCT_ID = "0fd9", "0086"
 CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "foot-pedal/config.json"
 RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")) / "foot-pedal"
@@ -125,6 +127,45 @@ async def run(*args, timeout=5, cwd=None):
     if proc.returncode: raise RuntimeError(stderr.decode(errors="replace").strip()[:250] or f"{args[0]} exited {proc.returncode}")
     return stdout.decode(errors="replace").strip()
 
+class DeviceMonitor:
+    """Use libudev's filtered, post-permission HID notifications without a helper."""
+    def __init__(self):
+        self.context=None;self.monitor=None
+        self.lib=ctypes.CDLL("libudev.so.1",use_errno=True)
+        ptr=ctypes.c_void_p
+        signatures={
+            "udev_new":([],ptr), "udev_unref":([ptr],ptr),
+            "udev_monitor_new_from_netlink":([ptr,ctypes.c_char_p],ptr),
+            "udev_monitor_unref":([ptr],ptr),
+            "udev_monitor_filter_add_match_subsystem_devtype":([ptr,ctypes.c_char_p,ctypes.c_char_p],ctypes.c_int),
+            "udev_monitor_enable_receiving":([ptr],ctypes.c_int),
+            "udev_monitor_get_fd":([ptr],ctypes.c_int),
+            "udev_monitor_receive_device":([ptr],ptr), "udev_device_unref":([ptr],ptr),
+        }
+        for name,(args,result) in signatures.items():
+            fn=getattr(self.lib,name);fn.argtypes=args;fn.restype=result
+        try:
+            self.context=self.lib.udev_new()
+            if not self.context:raise OSError("Could not create udev context")
+            self.monitor=self.lib.udev_monitor_new_from_netlink(self.context,b"udev")
+            if not self.monitor:raise OSError("Could not create udev monitor")
+            if self.lib.udev_monitor_filter_add_match_subsystem_devtype(self.monitor,b"hidraw",None)<0:raise OSError("Could not filter udev events")
+            if self.lib.udev_monitor_enable_receiving(self.monitor)<0:raise OSError("Could not subscribe to udev events")
+            self.fd=self.lib.udev_monitor_get_fd(self.monitor)
+            if self.fd<0:raise OSError("Could not get udev socket")
+        except BaseException:
+            self.close();raise
+    def receive(self):
+        ctypes.set_errno(0)
+        device=self.lib.udev_monitor_receive_device(self.monitor)
+        if device:self.lib.udev_device_unref(device);return True
+        code=ctypes.get_errno()
+        if code not in (0,errno.EAGAIN,errno.EWOULDBLOCK):raise OSError(code,os.strerror(code))
+        return False
+    def close(self):
+        if self.monitor:self.lib.udev_monitor_unref(self.monitor);self.monitor=None
+        if self.context:self.lib.udev_unref(self.context);self.context=None
+
 class Daemon:
     def __init__(self, config=CONFIG, runtime=RUNTIME):
         self.config_path, self.runtime = Path(config), Path(runtime)
@@ -147,13 +188,30 @@ class Daemon:
         self.holds={}; self.mic_lock=asyncio.Lock(); self.tasks=set(); self.sources=[]; self.startup=False
         self.baseline=False; self.closing=False; self.mutation_lock=asyncio.Lock()
         self.wake=asyncio.Event(); self.last_state=None; self.refresh_actions()
+        self.monitor=None;self.rescan=True
+    def start_monitor(self):
+        try:
+            self.monitor=DeviceMonitor()
+            asyncio.get_running_loop().add_reader(self.monitor.fd,self.device_changed)
+        except (OSError,AttributeError):
+            if self.monitor:self.monitor.close()
+            self.monitor=None  # Restricted/container environments retain bounded discovery.
+    def device_changed(self):
+        try:
+            # Limit each callback so an event burst cannot starve input/RPC.
+            for _ in range(32):
+                if not self.monitor.receive():break
+                self.rescan=True;self.wake.set()
+        except OSError:
+            asyncio.get_running_loop().remove_reader(self.monitor.fd)
+            self.monitor.close();self.monitor=None;self.rescan=True;self.publish()
     def refresh_actions(self):
         available={dep:bool(shutil.which(dep)) for dep in {v[1] for v in ACTIONS.values() if v[1]}}
         self.actions=[{"value":k,"label":v[0],"available":not v[1] or available[v[1]],"dependency":v[1]} for k,v in ACTIONS.items()]
     def presets(self): return copy.deepcopy(BUILTINS) + copy.deepcopy(self.config["presets"])
     def active(self): return next(p for p in self.presets() if p["id"]==self.config["active"])
     def status(self):
-        return {"version":VERSION,"connected":self.connected,"device_error":self.device_error,"config_error":self.config_error,
+        return {"version":VERSION,"discovery":"udev" if self.monitor else "poll","connected":self.connected,"device_error":self.device_error,"config_error":self.config_error,
                 "input_ready":self.baseline,"enabled":self.config["enabled"],"startup":self.startup,"active":self.config["active"],"presets":self.presets(),
                 "pressed":self.pressed,"last_input":self.last_input,"errors":self.errors,"busy":sorted(self.busy),
                 "testing":self.test_owner is not None,"sources":self.sources,
@@ -201,7 +259,7 @@ class Daemon:
     def disconnect(self, reason="Pedal disconnected"):
         if self.fd is not None:
             asyncio.get_running_loop().remove_reader(self.fd); os.close(self.fd); self.fd=None
-        self.baseline=False; self.connected=False; self.device_error=reason; self.pressed=[False]*3; self.armed=[False]*3; self.epoch+=1
+        self.baseline=False; self.connected=False; self.device_error=reason; self.pressed=[False]*3; self.armed=[False]*3; self.epoch+=1;self.rescan=True
         self.spawn(self.release_all()); self.publish()
     async def execute(self,i,a,epoch):
         if epoch!=self.epoch or not self.allowed(): return
@@ -301,7 +359,7 @@ class Daemon:
     async def rpc(self,msg,owner):
         op=msg.get("op")
         if op=="status": return self.status()
-        if op=="refresh": self.refresh_actions(); await self.discover_sources(); self.publish(); return self.status()
+        if op=="refresh": self.rescan=True; self.refresh_actions(); await self.discover_sources(); self.publish(); return self.status()
         if op=="test_heartbeat":
             if owner is self.test_owner: self.test_until=time.monotonic()+4; self.wake.set()
             return {}
@@ -362,8 +420,10 @@ class Daemon:
             writer.close()
     async def watch(self):
         next_discovery=next_restore=0
+        access_retry=False
         while not self.closing:
-            if self.fd is None and time.monotonic()>=next_discovery:
+            if self.fd is None and (self.rescan or ((not self.monitor or access_retry) and time.monotonic()>=next_discovery)):
+                self.rescan=False;access_retry=False
                 next_discovery=time.monotonic()+2
                 path=find_pedal()
                 if path:
@@ -372,19 +432,21 @@ class Daemon:
                         asyncio.get_running_loop().add_reader(self.fd,self.ready);self.publish()
                     except OSError as e:
                         self.device_error="Device access denied" if isinstance(e,PermissionError) else str(e)
+                        access_retry=True
                 else:self.device_error="Pedal disconnected — reconnect USB"
                 self.publish()
             if self.test_owner is not None and time.monotonic()>self.test_until: await self.end_test()
             if any(not h["owners"] for h in self.holds.values()) and time.monotonic()>=next_restore:
                 await self.release(-1)
                 next_restore=time.monotonic()+2
-            # HID and socket readers wake the event loop directly. Timers are
-            # needed only for disconnected hardware, a test lease, or recovery.
+            # HID, filtered udev and socket readers wake the loop directly.
+            # Poll only if notifications are unavailable or device access failed.
             deadlines=[]
-            if self.fd is None: deadlines.append(next_discovery)
+            if self.fd is None and (not self.monitor or access_retry): deadlines.append(next_discovery)
             if self.test_owner is not None: deadlines.append(self.test_until)
             if any(not h["owners"] for h in self.holds.values()): deadlines.append(next_restore)
             self.wake.clear()
+            if self.fd is None and self.rescan:continue
             if deadlines:
                 try: await asyncio.wait_for(self.wake.wait(),max(0,min(deadlines)-time.monotonic()))
                 except asyncio.TimeoutError: pass
@@ -402,9 +464,11 @@ class Daemon:
         stop=asyncio.Event()
         loop=asyncio.get_running_loop()
         for sig in [signal.SIGINT,signal.SIGTERM]:loop.add_signal_handler(sig,stop.set)
+        self.start_monitor()
         watcher=asyncio.create_task(self.watch())
         await stop.wait()
         self.closing=True;self.epoch+=1;watcher.cancel()
+        if self.monitor:loop.remove_reader(self.monitor.fd);self.monitor.close()
         # Python 3.14 Server.wait_closed waits for clients too. Close them before
         # waiting, otherwise a persistent panel connection deadlocks service stop.
         server.close()

@@ -59,8 +59,9 @@ under a 0700 directory. A process lock prevents two utility daemons owning the
 device. The original script was replaced, not run alongside the new service.
 The native QML socket receives changed state directly; no Python UI bridge runs.
 A lost connection reconnects automatically. Connected idle operation uses no
-periodic daemon timer or UI heartbeat. USB discovery retries every two seconds
-while disconnected; failed microphone restores retry every two seconds while
+periodic daemon timer or UI heartbeat. Filtered libudev notifications wake discovery when HID devices change, including
+while unplugged. Two-second discovery is only a fallback when notifications
+are unavailable or device access fails; failed microphone restores retry every two seconds while
 pending. Test mode alone renews its lease every second. Dependency availability
 is cached until panel refresh; actions still validate dependencies when executed.
 Opening the panel refreshes available microphones and actions. Socket loss is
