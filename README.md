@@ -73,8 +73,8 @@ omarchy plugin update sudonim.foot-pedal
 
 Open the panel and click **Update controls** if offered. Plugin updates do not
 execute installer hooks; this explicit action updates and restarts the daemon
-while preserving presets and startup preferences. A stopped service can be
-updated by running `install.sh` above before **Start controls**.
+while preserving presets and startup preferences. This also works while the
+service is stopped; terminal users can run `install.sh` above instead.
 
 If you previously installed the 1.1 local snapshot, use the
 [migration instructions](docs/migration.md) before the first `plugin add`.

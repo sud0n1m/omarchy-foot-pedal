@@ -23,7 +23,7 @@ Panel {
     property bool removePrompt: false
     property string setupMessage: ""
     readonly property bool maintenance: manager.running
-    readonly property bool needsUpdate: online && state.version !== releaseVersion
+    readonly property bool needsUpdate: (online && state.version !== releaseVersion) || (installationChecked && installation.installed && installation.version !== releaseVersion)
     property string error: ""
     property string page: "main"
     property string selectedPreset: "workspaces"
@@ -247,7 +247,7 @@ Panel {
                         Action {id:closeButton;text:root.page==="main" ? "×" : "←";onClicked:root.back();tooltipText:root.page==="main" ? "Close" : "Back"}
                     }
                     Label {width:parent.width;visible:root.error!=="" || !!root.state.config_error;text:root.error || root.state.config_error || "";color:Color.urgent}
-                    Caption {width:parent.width;visible:root.maintenance || root.setupMessage!=="";text:root.maintenance ? "Updating controls…" : root.setupMessage}
+                    Caption {width:parent.width;visible:root.maintenance || root.setupMessage!=="";text:root.maintenance ? (manager.action==="uninstall" ? "Removing controls…" : "Installing controls…") : root.setupMessage}
                     Column {
                         width:parent.width;spacing:Style.space(8)
                         visible:root.installationChecked && (!root.installation.installed || root.needsUpdate)
