@@ -21,7 +21,11 @@ retained. [Current panel](08-rust-main.png).
 - Native UI preset navigation and test start/end passed. The real pedal is now
   connected and detected. No real dictation, media or microphone action was
   triggered as part of verification; physical actuation remains a manual check.
-- Actual plugin disable/enable stops/restarts the worker. The worker uses a
+- Actual stock plugin add, update, disable/enable, remove, and re-add passed.
+  A fresh clone starts controls without running an installer, and removal stops
+  its worker. Config bytes are preserved and no independent user unit remains.
+  CI passed on Ubuntu 24.04 for both the source build and the bundled binary.
+  The worker uses a
   private owner socket so QML destruction closes its lifetime connection,
   allowing microphone restoration before exit. A Rust test holds a mock
   microphone and verifies restoration after this exact owner-socket closure.

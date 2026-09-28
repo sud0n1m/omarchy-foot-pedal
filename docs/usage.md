@@ -6,7 +6,7 @@ service for the Elgato Stream Deck Pedal (`0fd9:0086`).
 Click the three-pedal bar icon, or run
 `omarchy-shell sudonim.foot-pedal open`.
 
-The active preset is **Workspaces + dictation**:
+The built-in **Workspaces + dictation** preset provides:
 
 | Left | Middle | Right |
 | --- | --- | --- |
