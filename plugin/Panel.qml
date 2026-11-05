@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 Panel {
@@ -13,7 +14,7 @@ Panel {
     ipcTarget: "sudonim.foot-pedal"
     implicitWidth: barButton.implicitWidth
     implicitHeight: barButton.implicitHeight
-    readonly property color fg: Color.popups.text
+    readonly property color fg: Commons.Color.popups.text
     property var state: ({connected:false,input_ready:false,startup:false,presets:[], actions:[], sources:[], pressed:[false,false,false], errors:[], enabled:false})
     property string focusedControl: ""
     property bool online: false
@@ -130,7 +131,7 @@ Panel {
     }
     IpcHandler {
         target:"sudonim.foot-pedal-status"
-        function status():string{return JSON.stringify({online:root.online,page:root.page,opened:root.opened,dirty:root.dirty,selectedPreset:root.selectedPreset,draft:root.draft,focus:root.focusedControl,recording:root.recording,pending:root.pending,error:root.error,state:root.state,workerError:root.worker ? root.worker.error : "",theme:{background:String(Color.popups.background),text:String(root.fg),accent:String(Color.accent),font:Style.font.family,radius:Style.cornerRadius},geometry:{x:popup.cardOrigin.x,y:popup.cardOrigin.y,width:popup.contentWidth,height:popup.contentHeight}})}
+        function status():string{return JSON.stringify({online:root.online,page:root.page,opened:root.opened,dirty:root.dirty,selectedPreset:root.selectedPreset,draft:root.draft,focus:root.focusedControl,recording:root.recording,pending:root.pending,error:root.error,state:root.state,workerError:root.worker ? root.worker.error : "",theme:{background:String(Commons.Color.popups.background),text:String(root.fg),accent:String(Commons.Color.accent),font:Style.font.family,radius:Style.cornerRadius},geometry:{x:popup.cardOrigin.x,y:popup.cardOrigin.y,width:popup.contentWidth,height:popup.contentHeight}})}
     }
     component Label: Text {
         color:root.fg;font.family:Style.font.family;font.pixelSize:Style.font.body
@@ -174,7 +175,7 @@ Panel {
                 Column {
                     anchors.fill:parent;anchors.margins:Style.space(10);spacing:Style.space(12)
                     Caption {text:["LEFT","MIDDLE","RIGHT"][pedalItem.index]}
-                    Label {font.pixelSize:Style.font.display;color:Color.accent;text:diagram.testMode ? (pedalItem.down ? "↓" : "—") : ["←","◎","→"][pedalItem.index]}
+                    Label {font.pixelSize:Style.font.display;color:Commons.Color.accent;text:diagram.testMode ? (pedalItem.down ? "↓" : "—") : ["←","◎","→"][pedalItem.index]}
                     Label {width:parent.width;text:diagram.testMode ? (pedalItem.down ? "Pressed" : "Released") : root.actionName(root.currentPreset.actions[pedalItem.index]);font.bold:true}
                 }
             }
@@ -185,7 +186,7 @@ Panel {
         iconComponent: Component {
             Canvas {
                 id:icon
-                readonly property color ink:root.online && root.state.enabled ? barButton.foreground : Color.muted
+                readonly property color ink:root.online && root.state.enabled ? barButton.foreground : Commons.Color.muted
                 onInkChanged:requestPaint();onWidthChanged:requestPaint();onHeightChanged:requestPaint()
                 onPaint:{var c=getContext("2d");c.reset();c.scale(width/24,height/24);c.strokeStyle=ink;c.lineWidth=1.5;c.strokeRect(1.5,6,5,13);c.strokeRect(8.5,4,7,15);c.strokeRect(17.5,6,5,13)}
             }
@@ -217,7 +218,7 @@ Panel {
                         }
                         Action {id:closeButton;text:root.page==="main" ? "×" : "←";onClicked:root.back();tooltipText:root.page==="main" ? "Close" : "Back"}
                     }
-                    Label {width:parent.width;visible:root.error!=="" || !!root.state.config_error;text:root.error || root.state.config_error || "";color:Color.urgent}
+                    Label {width:parent.width;visible:root.error!=="" || !!root.state.config_error;text:root.error || root.state.config_error || "";color:Commons.Color.urgent}
                     Caption {width:parent.width;visible:!root.online;text:root.worker && root.worker.error ? root.worker.error : "Starting pedal controls…"}
                     Action {visible:!root.online && root.worker && !root.worker.running;text:"Start controls";bordered:true;onClicked:root.worker.start()}
                     Caption {width:parent.width;visible:root.state.device_error==="Device access denied";text:"USB access needs setup. Follow the USB permissions instructions in the plugin README, then reconnect the pedal."}
@@ -241,7 +242,7 @@ Panel {
                         Caption {width:parent.width;visible:root.state.connected && !root.state.input_ready;text:"Press and release any pedal once to initialize input."}
                         Pedals {}
                         Caption {width:parent.width;text:"Select a pedal to edit. Changes are saved as a preset."}
-                        Repeater {model:root.state.errors || [];delegate:Label {required property string modelData;required property int index;width:content.width;visible:modelData!=="";text:["Left","Middle","Right"][index]+": "+modelData;color:Color.urgent}}
+                        Repeater {model:root.state.errors || [];delegate:Label {required property string modelData;required property int index;width:content.width;visible:modelData!=="";text:["Left","Middle","Right"][index]+": "+modelData;color:Commons.Color.urgent}}
                         Divider {}
                         Toggle {width:parent.width;label:"Pedal actions · "+(root.state.enabled ? "On" : "Off");description:"Pause all three pedals without changing your preset.";checked:root.state.enabled===true;foreground:root.fg;enabled:root.online && !root.pending;onClicked:root.request("enabled",{value:!root.state.enabled})}
                         Caption {width:parent.width;text:"Controls start with Omarchy while this plugin is enabled."}
@@ -281,10 +282,10 @@ Panel {
                         Row {spacing:Style.space(8);Repeater {model:["Left","Middle","Right"];delegate:Action {required property string modelData;required property int index;text:modelData;selected:root.pedal===index;bordered:true;onClicked:{root.pedal=index;root.recording=false}}}}
                         Caption {text:"ACTION"}
                         Dropdown {id:actionPicker;width:parent.width;showLabel:false;options:root.actionOptions;value:root.currentAction.type;onChanged:function(value){root.chooseAction(value)}}
-                        Caption {width:parent.width;visible:root.currentAction.type==="dictation";text:"Tap once to start Voxtype dictation; tap again to stop."}
+                        Caption {width:parent.width;visible:root.currentAction.type==="dictation";text:"Tap once to start dictation with your Omarchy default (Superwhisper or Voxtype); tap again to stop."}
                         Column {visible:root.currentAction.type==="shortcut";width:parent.width;spacing:Style.space(8)
                             Caption {text:"SHORTCUT"}
-                            Label {width:parent.width;text:root.recording ? "Press a shortcut now · Esc cancels" : root.chord(root.currentAction) || "No shortcut recorded";font.pixelSize:Style.font.title;color:root.recording ? Color.accent : root.fg}
+                            Label {width:parent.width;text:root.recording ? "Press a shortcut now · Esc cancels" : root.chord(root.currentAction) || "No shortcut recorded";font.pixelSize:Style.font.title;color:root.recording ? Commons.Color.accent : root.fg}
                             Action {text:root.recording ? "Cancel recording" : "Record shortcut";bordered:true;onClicked:{root.recording=!root.recording;keys.forceActiveFocus()}}
                             Caption {width:parent.width;text:"Sent to the focused app once per press."}
                         }

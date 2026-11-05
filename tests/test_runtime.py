@@ -25,7 +25,7 @@ class RuntimeTests(unittest.TestCase):
         pactl = mock / "pactl"
         pactl.write_text('#!/bin/sh\nprintf "[]\\n"\n')
         pactl.chmod(0o755)
-        for name in ('hyprctl', 'voxtype', 'busctl', 'wtype'):
+        for name in ('hyprctl', 'omarchy-dictation', 'busctl', 'wtype'):
             tool = mock / name
             tool.write_text('#!/bin/sh\nexit 0\n')
             tool.chmod(0o755)

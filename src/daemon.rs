@@ -256,7 +256,7 @@ impl Daemon {
                 .await?;
             }
             "dictation" => {
-                cmd(&["voxtype", "record", "toggle"]).await?;
+                cmd(&["omarchy-dictation", "toggle"]).await?;
             }
             "media_previous" | "media_toggle" | "media_next" => {
                 let all = cmd(&["busctl", "--user", "--no-pager", "--no-legend", "list"]).await?;
@@ -871,7 +871,7 @@ mod tests {
         d.input([true; 3]);
         drain(&d).await;
         assert_eq!(calls().len(), 3);
-        assert!(calls().contains(&vec!["voxtype".into(), "record".into(), "toggle".into()]));
+        assert!(calls().contains(&vec!["omarchy-dictation".into(), "toggle".into()]));
     });
     local_test!(test_owner_and_rearming_and_pause, async {
         let (_t, d) = setup();
@@ -1113,7 +1113,7 @@ mod tests {
         tokio::time::sleep(Duration::from_millis(20)).await;
         writer.write_all(&[0, 0, 0, 0, 0, 1, 0, 0]).unwrap();
         tokio::time::sleep(Duration::from_millis(20)).await;
-        assert!(calls().contains(&vec!["voxtype".into(), "record".into(), "toggle".into()]));
+        assert!(calls().contains(&vec!["omarchy-dictation".into(), "toggle".into()]));
         device::TEST_DEVICE.with_borrow_mut(|p| *p = None);
         drop(writer);
         tokio::time::sleep(Duration::from_millis(20)).await;

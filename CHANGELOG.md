@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0
+
+- Dictation now toggles Omarchy's default dictation backend through
+  `omarchy-dictation`, so it works with Superwhisper (the new default) or
+  Voxtype. Existing presets using the dictation action follow automatically.
+
 ## 2.0.0
 
 - Rewrite the background worker in Rust, retaining the existing preset format,

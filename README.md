@@ -22,8 +22,8 @@ The repository includes `bin/foot-pedal`, a compiled **Linux x86-64** worker for
 Omarchy 4 (glibc 2.39+ and libudev.so.1). Rust is required only to build from source.
 See [build instructions and binary provenance](docs/build.md).
 
-Individual actions use existing system tools: `hyprctl`, `voxtype`, `busctl`,
-`pactl`, and `wtype`. The panel identifies missing action dependencies.
+Individual actions use existing system tools: `hyprctl`, `omarchy-dictation`,
+`busctl`, `pactl`, and `wtype`. The panel identifies missing action dependencies.
 
 **Upgrading from 1.x?** Remove the old companion service first using the
 [one-time migration steps](docs/migration.md). Fresh installs need no migration.
@@ -40,7 +40,11 @@ The original defaults remain available as **Workspaces + dictation**:
 
 | Left | Middle | Right |
 | --- | --- | --- |
-| Previous workspace | Toggle Voxtype dictation | Next workspace |
+| Previous workspace | Toggle dictation | Next workspace |
+
+Dictation uses Omarchy's default dictation backend (Superwhisper by default,
+or Voxtype), so the pedal follows **Setup > Defaults > Dictation** with no
+plugin setting to change.
 
 ![Native panel using the active Omarchy theme](docs/verification/08-rust-main.png)
 

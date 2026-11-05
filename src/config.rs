@@ -9,7 +9,7 @@ pub type Result<T> = std::result::Result<T, String>;
 pub const ACTIONS: &[(&str, &str, Option<&str>)] = &[
     ("workspace_previous", "Previous workspace", Some("hyprctl")),
     ("workspace_next", "Next workspace", Some("hyprctl")),
-    ("dictation", "Toggle dictation", Some("voxtype")),
+    ("dictation", "Toggle dictation", Some("omarchy-dictation")),
     ("media_previous", "Previous track", Some("busctl")),
     ("media_toggle", "Play or pause", Some("busctl")),
     ("media_next", "Next track", Some("busctl")),

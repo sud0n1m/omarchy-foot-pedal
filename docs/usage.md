@@ -10,7 +10,10 @@ The built-in **Workspaces + dictation** preset provides:
 
 | Left | Middle | Right |
 | --- | --- | --- |
-| Previous workspace | Toggle Voxtype dictation | Next workspace |
+| Previous workspace | Toggle dictation | Next workspace |
+
+Dictation runs `omarchy-dictation toggle`, which uses the backend chosen in
+Omarchy's **Setup > Defaults > Dictation** (Superwhisper by default, or Voxtype).
 
 After the service starts or USB reconnects, press and release a pedal once to
 establish the released input state. The panel shows this instruction until
@@ -20,7 +23,7 @@ actions; closing the panel ends testing and restores the prior pause state.
 ## Controls
 
 - **Change preset** offers the original setup, media controls and push-to-talk.
-  Push-to-talk asks for a microphone and saves a custom copy; it is not Voxtype.
+  Push-to-talk asks for a microphone and saves a custom copy; it is not dictation.
 - Select a pedal to choose a workspace, dictation, media, microphone, shortcut,
   command or no-action assignment. The other two assignments are preserved.
 - **Record shortcut** captures a chord without sending it to another app.
