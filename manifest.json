@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "sudonim.foot-pedal",
   "name": "Elgato Foot Pedal",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Colin Nederkoorn",
   "description": "Elgato Stream Deck Pedal controls: workspace, dictation, media, microphone and custom shortcuts. Efficient Rust worker, automatic plugin lifecycle.",
   "kinds": [

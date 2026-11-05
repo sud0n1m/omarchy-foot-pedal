@@ -12,8 +12,9 @@ The built-in **Workspaces + dictation** preset provides:
 | --- | --- | --- |
 | Previous workspace | Toggle dictation | Next workspace |
 
-Dictation runs `omarchy-dictation toggle`, which uses the backend chosen in
-Omarchy's **Setup > Defaults > Dictation** (Superwhisper by default, or Voxtype).
+Dictation uses whatever the system provides, checked at each press:
+`omarchy-dictation toggle` (the backend chosen in **Setup > Defaults >
+Dictation**), else `superwhisper record`, else `voxtype record toggle`.
 
 After the service starts or USB reconnects, press and release a pedal once to
 establish the released input state. The panel shows this instruction until

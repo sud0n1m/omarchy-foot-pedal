@@ -129,7 +129,7 @@ impl Daemon {
         s.epoch == epoch && s.pressed[i] && self.allowed()
     }
     fn refresh_actions(&self) {
-        self.state.borrow_mut().actions=json!(config::ACTIONS.iter().map(|(value,label,dep)|json!({"value":value,"label":label,"available":dep.is_none_or(config::executable),"dependency":dep})).collect::<Vec<_>>());
+        self.state.borrow_mut().actions=json!(config::ACTIONS.iter().map(|(value,label,dep)|json!({"value":value,"label":label,"available":config::ready(value,*dep),"dependency":dep})).collect::<Vec<_>>());
     }
     pub fn status(&self) -> Value {
         let s = self.state.borrow();
@@ -256,7 +256,8 @@ impl Daemon {
                 .await?;
             }
             "dictation" => {
-                cmd(&["omarchy-dictation", "toggle"]).await?;
+                cmd(config::dictation().ok_or("Toggle dictation needs Superwhisper or Voxtype")?)
+                    .await?;
             }
             "media_previous" | "media_toggle" | "media_next" => {
                 let all = cmd(&["busctl", "--user", "--no-pager", "--no-legend", "list"]).await?;

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1
+
+- Dictation falls back to installed Superwhisper, then Voxtype, on systems
+  without Omarchy's `omarchy-dictation` dispatcher.
+
 ## 2.1.0
 
 - Dictation now toggles Omarchy's default dictation backend through

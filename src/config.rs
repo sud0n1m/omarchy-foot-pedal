@@ -9,7 +9,11 @@ pub type Result<T> = std::result::Result<T, String>;
 pub const ACTIONS: &[(&str, &str, Option<&str>)] = &[
     ("workspace_previous", "Previous workspace", Some("hyprctl")),
     ("workspace_next", "Next workspace", Some("hyprctl")),
-    ("dictation", "Toggle dictation", Some("omarchy-dictation")),
+    (
+        "dictation",
+        "Toggle dictation",
+        Some("Superwhisper or Voxtype"),
+    ),
     ("media_previous", "Previous track", Some("busctl")),
     ("media_toggle", "Play or pause", Some("busctl")),
     ("media_next", "Next track", Some("busctl")),
@@ -19,6 +23,27 @@ pub const ACTIONS: &[(&str, &str, Option<&str>)] = &[
     ("command", "Run command", None),
     ("none", "No action", None),
 ];
+/// Dictation commands in preference order: Omarchy's configured default
+/// backend, then whichever dictation app the system has installed.
+pub const DICTATION: &[&[&str]] = &[
+    &["omarchy-dictation", "toggle"],
+    &["superwhisper", "record"],
+    &["voxtype", "record", "toggle"],
+];
+pub fn dictation_with(has: impl Fn(&str) -> bool) -> Option<&'static [&'static str]> {
+    DICTATION.iter().copied().find(|c| has(c[0]))
+}
+pub fn dictation() -> Option<&'static [&'static str]> {
+    dictation_with(executable)
+}
+/// Whether an action's system tools are present.
+pub fn ready(kind: &str, dep: Option<&str>) -> bool {
+    if kind == "dictation" {
+        dictation().is_some()
+    } else {
+        dep.is_none_or(executable)
+    }
+}
 pub fn defaults() -> Value {
     json!({"version":1,"enabled":true,"active":"workspaces","presets":[]})
 }
@@ -70,7 +95,7 @@ pub fn action(a: &Value, available: bool) -> Result<Value> {
         .iter()
         .find(|x| x.0 == kind)
         .ok_or("Choose a valid action")?;
-    if available && dep.is_some_and(|d| !executable(d)) {
+    if available && !ready(kind, *dep) {
         return Err(format!("{label} needs {}", dep.unwrap()));
     }
     let mut out = json!({"type":kind});
@@ -285,5 +310,22 @@ mod tests {
         let mut c = defaults();
         c["active"] = json!("missing");
         assert!(validate(c).is_err());
+    }
+    #[test]
+    fn dictation_prefers_omarchy_default_then_installed_app() {
+        let with = |tools: &[&str]| dictation_with(|t| tools.contains(&t));
+        assert_eq!(
+            with(&["voxtype", "superwhisper", "omarchy-dictation"]),
+            Some(&["omarchy-dictation", "toggle"][..])
+        );
+        assert_eq!(
+            with(&["voxtype", "superwhisper"]),
+            Some(&["superwhisper", "record"][..])
+        );
+        assert_eq!(
+            with(&["voxtype"]),
+            Some(&["voxtype", "record", "toggle"][..])
+        );
+        assert_eq!(with(&[]), None);
     }
 }
